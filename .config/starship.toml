@@ -5,12 +5,87 @@ add_newline = true
 format = """
 $username\
 $hostname\
+$kubernetes\
 $directory\
 $git_branch\
 $git_state\
 $git_status\
+$hg_branch\
+$pijul_channel\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$golang\
+$guix_shell\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$gradle\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$solidity\
+$swift\
+$terraform\
+$typst\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$direnv\
+$env_var\
+$crystal\
+$custom\
+$sudo\
 $cmd_duration\
-$python"""
+$line_break\
+$jobs\
+$status\
+$os\
+$container\
+$shell"""
+
+[username]
+format = '[$user]($style) '
+
+[hostname]
+ssh_symbol = " "
+format = '[$ssh_symbol$hostname]($style) '
 
 [directory]
 style = "blue"
@@ -94,9 +169,6 @@ symbol = " "
 
 [hg_branch]
 symbol = " "
-
-[hostname]
-ssh_symbol = " "
 
 [java]
 symbol = " "
