@@ -1,0 +1,11 @@
+#
+#  ~/.gitconfig
+# This is Git's per-user configuration file.
+#
+
+[alias]
+  g = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue) <%an>%Creset' --abbrev-commit
+  difff = diff --word-diff
+[user]
+        name = okawak
+        email = kodak2022@outlook.jp

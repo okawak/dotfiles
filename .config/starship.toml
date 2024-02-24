@@ -15,7 +15,6 @@ $pijul_channel\
 $docker_context\
 $package\
 $c\
-$cmake\
 $cobol\
 $daml\
 $dart\
