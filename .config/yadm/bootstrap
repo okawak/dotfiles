@@ -1,11 +1,15 @@
 #!/bin/bash
 
+set -u
+
 # Set XDG directories.
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 
 ## Colorize output.
+# shellcheck disable=SC2034
+bold="\033[1m"
 # shellcheck disable=SC2034
 red="\033[91m"
 # shellcheck disable=SC2034
@@ -17,4 +21,91 @@ yellow="\033[93m"
 # shellcheck disable=SC2034
 white="\033[97m"
 # shellcheck disable=SC2034
-no_color="\033[0m"
+no_format="\033[0m"
+
+# useful function
+say() {
+    printf '%bdotfiles%b: %s\n' "$bold" "$no_format" "$1"
+}
+
+err() {
+    say "$1" >&2
+    exit 1
+}
+
+need_cmd() {
+    if ! check_cmd "$1"; then
+        err "need '$1' (command not found)"
+    fi
+}
+
+check_cmd() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# main structure
+main() {
+    need_cmd uname
+
+    get_ostype || return 1
+    local _ostype="$RETVAL"
+    echo "$_ostype"
+}
+
+get_ostype() {
+    local _ostype
+    _ostype="$(uname -s)"
+
+    case "$_ostype" in
+    Linux)
+        # shellcheck disable=SC1091
+        if [ -f "/etc/os-release" ]; then
+            source "/etc/os-release"
+            case "$NAME" in
+            *Alma*)
+                _ostype=AlmaLinux
+                ;;
+            *Arch*)
+                # not prepared
+                _ostype=ArchLinux
+                ;;
+            *Manjaro*)
+                # not prepared
+                _ostype=ManjaroLinux
+                ;;
+            *Ubuntu*)
+                # not prepared
+                _ostype=Ubuntu
+                ;;
+            *Debian*)
+                # not prepared
+                _ostype=Debian
+                ;;
+            *Raspbian*)
+                # not prepared
+                _ostype=Raspbian
+                ;;
+            *)
+                err "Unable to identify Linux distribution..."
+                ;;
+            esac
+        else
+            err "could not find /etc/os-release file..."
+        fi
+        ;;
+    Darwin)
+        _ostype=MacOS
+        ;;
+    windows32)
+        _ostype=Windows
+        ;;
+    *)
+        err "unrecognized OS type: $_ostype"
+        ;;
+    esac
+
+    RETVAL="$_ostype"
+}
+
+# execute part
+main "$@" || exit 1
