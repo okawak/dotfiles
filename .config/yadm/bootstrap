@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -u
+set -eu
 
 # Set XDG directories.
 export XDG_CONFIG_HOME="${HOME}/.config"
@@ -9,47 +9,31 @@ export XDG_DATA_HOME="${HOME}/.local/share"
 
 ## Colorize output.
 # shellcheck disable=SC2034
-bold="\033[1m"
+bold="$(tput bold 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
-red="\033[91m"
+gray="$(tput setaf 0 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
-green="\033[92m"
+underline="$(tput smul 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
-blue="\033[94m"
+red="$(tput setaf 1 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
-yellow="\033[93m"
+green="$(tput setaf 2 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
-white="\033[97m"
+yellow="$(tput setaf 3 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
-no_format="\033[0m"
-
-# useful function
-say() {
-    printf '%bdotfiles%b: %s\n' "$bold" "$no_format" "$1"
-}
-
-err() {
-    say "$1" >&2
-    exit 1
-}
-
-need_cmd() {
-    if ! check_cmd "$1"; then
-        err "need '$1' (command not found)"
-    fi
-}
-
-check_cmd() {
-    command -v "$1" >/dev/null 2>&1
-}
+blue="$(tput setaf 4 2>/dev/null || printf '')"
+# shellcheck disable=SC2034
+magenta="$(tput setaf 5 2>/dev/null || printf '')"
+# shellcheck disable=SC2034
+no_format="$(tput sgr0 2>/dev/null || printf '')"
 
 # main structure
 main() {
     need_cmd uname
 
+    printf "\n"
     get_ostype || return 1
     local _ostype="$RETVAL"
-    echo "$_ostype"
 }
 
 get_ostype() {
@@ -63,48 +47,170 @@ get_ostype() {
             source "/etc/os-release"
             case "$NAME" in
             *Alma*)
+                rpm_install
                 _ostype=AlmaLinux
                 ;;
+            *Amazon*)
+                rpm_install
+                _ostype=AmazonLinux
+                ;;
             *Arch*)
-                # not prepared
                 _ostype=ArchLinux
-                ;;
-            *Manjaro*)
-                # not prepared
-                _ostype=ManjaroLinux
-                ;;
-            *Ubuntu*)
-                # not prepared
-                _ostype=Ubuntu
+                warning "currently not support for $_ostype"
+                exit 1
                 ;;
             *Debian*)
-                # not prepared
+                deb_install
                 _ostype=Debian
                 ;;
+            *Manjaro*)
+                _ostype=ManjaroLinux
+                warning "currently not support for $_ostype"
+                exit 1
+                ;;
             *Raspbian*)
-                # not prepared
+                deb_install
                 _ostype=Raspbian
                 ;;
+            *Rocky*)
+                rpm_install
+                _ostype=RockyLinux
+                ;;
+            *Ubuntu*)
+                deb_install
+                _ostype=Ubuntu
+                ;;
             *)
-                err "Unable to identify Linux distribution..."
+                err "Unexpected Linux distribution: $_ostype"
                 ;;
             esac
         else
-            err "could not find /etc/os-release file..."
+            error "could not find /etc/os-release file..."
         fi
         ;;
     Darwin)
+        brew_install
         _ostype=MacOS
         ;;
     windows32)
+        # windows OS don't support zsh shell? (not WSL2)
         _ostype=Windows
+        error "Currently not support $_ostype"
         ;;
     *)
-        err "unrecognized OS type: $_ostype"
+        error "unrecognized OS type: $_ostype"
         ;;
     esac
 
     RETVAL="$_ostype"
+}
+
+rpm_install() {
+    need_cmd dnf
+
+    if check_cmd starship; then
+        info "we have starship! skip the install..."
+    else
+        local _answer
+        while true; do
+            read -rp "install starship now? (y/n): " _answer
+            case ${_answer} in
+            y)
+                sudo dnf update
+                sudo dnf copr enable atim/starship
+                sudo dnf install starship
+                break
+                ;;
+            n)
+                info "skip to install startship..."
+                info "you can install it by:"
+                blue_msg "dnf copr enable atim/starship"
+                blue_msg "dnf install starship"
+                break
+                ;;
+            esac
+        done
+    fi
+}
+
+deb_install() {
+    need_cmd curl
+
+    if check_cmd starship; then
+        info "we have starship! skip the install..."
+    else
+        local _answer
+        warn "currently apt package manager does not support starship"
+        while true; do
+            read -rp "install now from the source? (y/n): " _answer
+            case ${_answer} in
+            y)
+                curl -sS https://starship.rs/install.sh | sh
+                break
+                ;;
+            n)
+                info "skip to install startship..."
+                info "you can install it by:"
+                blue_msg "curl -sS https://starship.rs/install.sh | sh"
+                break
+                ;;
+            esac
+        done
+    fi
+}
+
+brew_install() {
+    need_cmd brew
+
+    if check_cmd starship; then
+        info "we have starship! skip the install..."
+    else
+        local _answer
+        while true; do
+            read -rp "install starship now? (y/n): " _answer
+            case ${_answer} in
+            y)
+                brew update
+                brew install starship
+                break
+                ;;
+            n)
+                info "skip to install startship..."
+                info "you can install it by:"
+                blue_msg "brew install starship"
+                break
+                ;;
+            esac
+        done
+    fi
+}
+
+# useful function
+info() {
+    printf '%s\n' "${bold}info:${no_format} $*"
+}
+
+warn() {
+    printf '%s\n' "${yellow}warning: $*${no_format}"
+}
+
+error() {
+    printf '%s\n' "${red}error: $*${no_format}" >&2
+    exit 1
+}
+
+blue_msg() {
+    printf '%s\n' "${blue}$*${no_format}"
+}
+
+need_cmd() {
+    if ! check_cmd "$1"; then
+        error "need '$1' (command not found)"
+    fi
+}
+
+check_cmd() {
+    command -v "$1" >/dev/null 2>&1
 }
 
 # execute part
