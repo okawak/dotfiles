@@ -7,7 +7,7 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 
-## Colorize output.
+# output format
 # shellcheck disable=SC2034
 bold="$(tput bold 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
@@ -32,18 +32,18 @@ main() {
     need_cmd uname
 
     printf "\n"
-    get_ostype || return 1
+    initialize_for_each_ostype || return 1
     local _ostype="$RETVAL"
 }
 
-get_ostype() {
+initialize_for_each_ostype() {
     local _ostype
     _ostype="$(uname -s)"
 
     case "$_ostype" in
     Linux)
-        # shellcheck disable=SC1091
         if [ -f "/etc/os-release" ]; then
+            # shellcheck disable=SC1091
             source "/etc/os-release"
             case "$NAME" in
             *Alma*)
@@ -56,7 +56,7 @@ get_ostype() {
                 ;;
             *Arch*)
                 _ostype=ArchLinux
-                warning "currently not support for $_ostype"
+                warn "currently not support for $_ostype"
                 exit 1
                 ;;
             *Debian*)
@@ -65,7 +65,7 @@ get_ostype() {
                 ;;
             *Manjaro*)
                 _ostype=ManjaroLinux
-                warning "currently not support for $_ostype"
+                warn "currently not support for $_ostype"
                 exit 1
                 ;;
             *Raspbian*)
@@ -85,7 +85,7 @@ get_ostype() {
                 ;;
             esac
         else
-            error "could not find /etc/os-release file..."
+            err "could not find /etc/os-release file..."
         fi
         ;;
     Darwin)
@@ -95,10 +95,10 @@ get_ostype() {
     windows32)
         # windows OS don't support zsh shell? (not WSL2)
         _ostype=Windows
-        error "Currently not support $_ostype"
+        err "Currently not support $_ostype"
         ;;
     *)
-        error "unrecognized OS type: $_ostype"
+        err "unrecognized OS type: $_ostype"
         ;;
     esac
 
@@ -124,16 +124,84 @@ rpm_install() {
             n)
                 info "skip to install startship..."
                 info "you can install it by:"
-                blue_msg "dnf copr enable atim/starship"
-                blue_msg "dnf install starship"
+                blue_msg "sudo dnf copr enable atim/starship"
+                blue_msg "sudo dnf install starship"
                 break
                 ;;
             esac
         done
     fi
+
+    if check_cmd zsh; then
+        info "we have zsh! skip the install..."
+    else
+        local _answer
+        while true; do
+            read -rp "install zsh now? (y/n): " _answer
+            case ${_answer} in
+            y)
+                sudo dnf install zsh
+                break
+                ;;
+            n)
+                info "skip to install zsh..."
+                info "you can install it by"
+                blue_msg "sudo dnf install zsh"
+                break
+                ;;
+            esac
+        done
+    fi
+
+    if check_cmd zsh && [ "${SHELL##*/}" = "zsh" ]; then
+        info "defalut shell is zsh! skip the setting..."
+    else
+        local _answer
+        while true; do
+            read -rp "change default shell to zsh now? (y/n) " _answer
+            case ${_answer} in
+            y)
+                if check_cmd chsh; then
+                    chsh -s /bin/zsh
+                else
+                    sudo dnf install util-linux-user
+                    chsh -s /bin/zsh
+                fi
+                break
+                ;;
+            n)
+                info "skip to change default shell to zsh"
+                info "you can change it by"
+                blue_msg "chsh -s /bin/zsh"
+                break
+                ;;
+            esac
+        done
+    fi
+
+    printf "\n"
+    info "Install the important command, git, tmux, vim..."
+    if check_cmd git; then
+        info "we have git! skip the install..."
+    else
+        sudo dnf install git
+    fi
+
+    if check_cmd tmux; then
+        info "we have tmux! skip the install..."
+    else
+        sudo dnf install tmux
+    fi
+
+    if check_cmd vim; then
+        info "we have vim! skip the install..."
+    else
+        sudo dnf install vim
+    fi
 }
 
 deb_install() {
+    need_cmd apt
     need_cmd curl
 
     if check_cmd starship; then
@@ -157,10 +225,74 @@ deb_install() {
             esac
         done
     fi
+
+    if check_cmd zsh; then
+        info "we have zsh! skip the install..."
+    else
+        local _answer
+        while true; do
+            read -rp "install zsh now? (y/n): " _answer
+            case ${_answer} in
+            y)
+                sudo apt install zsh
+                break
+                ;;
+            n)
+                info "skip to install zsh..."
+                info "you can install it by"
+                blue_msg "sudo apt install zsh"
+                break
+                ;;
+            esac
+        done
+    fi
+
+    if check_cmd zsh && [ "${SHELL##*/}" = "zsh" ]; then
+        info "defalut shell is zsh! skip the setting..."
+    else
+        local _answer
+        while true; do
+            read -rp "change default shell to zsh now? (y/n) " _answer
+            case ${_answer} in
+            y)
+                need_cmd chsh
+                chsh -s /bin/zsh
+                break
+                ;;
+            n)
+                info "skip to change default shell to zsh"
+                info "you can change it by"
+                blue_msg "chsh -s /bin/zsh"
+                break
+                ;;
+            esac
+        done
+    fi
+
+    printf "\n"
+    info "Install the important command, git, tmux, vim..."
+    if check_cmd git; then
+        info "we have git! skip the install..."
+    else
+        sudo apt install git
+    fi
+
+    if check_cmd tmux; then
+        info "we have tmux! skip the install..."
+    else
+        sudo apt install tmux
+    fi
+
+    if check_cmd vim; then
+        info "we have vim! skip the install..."
+    else
+        sudo apt install vim
+    fi
 }
 
 brew_install() {
     need_cmd brew
+    need_cmd zsh # default shell of macOS is zsh
 
     if check_cmd starship; then
         info "we have starship! skip the install..."
@@ -183,6 +315,49 @@ brew_install() {
             esac
         done
     fi
+
+    if [ "${SHELL##*/}" = "zsh" ]; then
+        info "defalut shell is zsh! skip the setting..."
+    else
+        local _answer
+        warn "it will change the default shell to /bin/zsh. if you want to use zsh from homebrew, you need to skip it"
+        while true; do
+            read -rp "change default shell to zsh now? (y/n) " _answer
+            case ${_answer} in
+            y)
+                need_cmd chsh
+                chsh -s /bin/zsh
+                break
+                ;;
+            n)
+                info "skip to change default shell to zsh"
+                info "you can change it by"
+                blue_msg "chsh -s /bin/zsh"
+                break
+                ;;
+            esac
+        done
+    fi
+
+    printf "\n"
+    info "Install the important command, git, tmux, vim..."
+    if check_cmd git; then
+        info "we have git! skip the install..."
+    else
+        brew install git
+    fi
+
+    if check_cmd tmux; then
+        info "we have tmux! skip the install..."
+    else
+        brew install tmux
+    fi
+
+    if check_cmd vim; then
+        info "we have vim! skip the install..."
+    else
+        brew install vim
+    fi
 }
 
 # useful function
@@ -194,7 +369,7 @@ warn() {
     printf '%s\n' "${yellow}warning: $*${no_format}"
 }
 
-error() {
+err() {
     printf '%s\n' "${red}error: $*${no_format}" >&2
     exit 1
 }
@@ -205,7 +380,7 @@ blue_msg() {
 
 need_cmd() {
     if ! check_cmd "$1"; then
-        error "need '$1' (command not found)"
+        err "need '$1' (command not found)"
     fi
 }
 
