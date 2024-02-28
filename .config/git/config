@@ -3,9 +3,28 @@
 # This is Git's per-user configuration file.
 #
 
-[alias]
-  g = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue) <%an>%Creset' --abbrev-commit
-  difff = diff --word-diff
 [user]
-        name = okawak
-        email = kodak2022@outlook.jp
+name = okawak
+email = kodak2022@outlook.jp
+
+[core]
+editor = vim
+autocrlf = input
+safecrlf = true
+# prevent garbled text (mainly for Japanese)
+quotepath = false
+
+# git fetch --prune, delete the branch that deleted in remote
+[fetch]
+prune = true
+
+# git pull --ff-only, not to make merge commit
+[pull]
+ff = only
+
+# git merge --no-ff, make merge commit
+[merge]
+ff = false
+
+[push]
+default = simple
