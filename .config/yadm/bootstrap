@@ -6,8 +6,18 @@ set -eu
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_STATE_HOME="${HOME}/.local/state"
+
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export VIMINIT=":source ${XDG_CONFIG_HOME}/vim/vimrc"
+
+REPOS_DIR="${HOME}/repos"
 
 # output format
+if ! command -v tput >/dev/null 2>&1; then
+    printf "need 'tput' (command not found)\n"
+    exit 1
+fi
 # shellcheck disable=SC2034
 bold="$(tput bold 2>/dev/null || printf '')"
 # shellcheck disable=SC2034
@@ -30,10 +40,32 @@ no_format="$(tput sgr0 2>/dev/null || printf '')"
 # main structure
 main() {
     need_cmd uname
+    need_cmd ln
+    need_cmd mkdir
+    need_cmd fc-list
 
     printf "\n"
     initialize_for_each_ostype || return 1
     local _ostype="$RETVAL"
+
+    printf "\n"
+    #setting_zsh || return 1
+    #setting_vim || return 1
+    #setting_tmux || return 1
+    #setting_git || return 1
+
+    case "${_ostype}" in
+    MacOS)
+        brew_font
+        ;;
+    *)
+        install_font
+        ;;
+    esac
+
+    printf "\n"
+    printf "%b%bComplete the %s initial setting!%b\n" "${underline}" "${bold}" "${_ostype}" "${no_format}"
+    printf "please relogin the shell to apply changes!\n\n"
 }
 
 initialize_for_each_ostype() {
@@ -162,17 +194,17 @@ rpm_install() {
             case ${_answer} in
             y)
                 if check_cmd chsh; then
-                    chsh -s /bin/zsh
+                    chsh -s "$(command -v zsh)"
                 else
                     sudo dnf install util-linux-user
-                    chsh -s /bin/zsh
+                    chsh -s "$(command -v zsh)"
                 fi
                 break
                 ;;
             n)
                 info "skip to change default shell to zsh"
                 info "you can change it by"
-                blue_msg "chsh -s /bin/zsh"
+                blue_msg "chsh -s /bin/zsh (the path can be confirmed by \"command -v zsh\" or \"which zsh\")"
                 break
                 ;;
             esac
@@ -256,13 +288,13 @@ deb_install() {
             case ${_answer} in
             y)
                 need_cmd chsh
-                chsh -s /bin/zsh
+                chsh -s "$(command -v zsh)"
                 break
                 ;;
             n)
                 info "skip to change default shell to zsh"
                 info "you can change it by"
-                blue_msg "chsh -s /bin/zsh"
+                blue_msg "chsh -s /bin/zsh (the path can be confirmed by \"command -v zsh\" or \"which zsh\")"
                 break
                 ;;
             esac
@@ -326,13 +358,13 @@ brew_install() {
             case ${_answer} in
             y)
                 need_cmd chsh
-                chsh -s /bin/zsh
+                chsh -s "$(command -v zsh)"
                 break
                 ;;
             n)
                 info "skip to change default shell to zsh"
                 info "you can change it by"
-                blue_msg "chsh -s /bin/zsh"
+                blue_msg "chsh -s /bin/zsh (the path can be confirmed by \"command -v zsh\" or \"which zsh\")"
                 break
                 ;;
             esac
@@ -357,6 +389,71 @@ brew_install() {
         info "we have vim! skip the install..."
     else
         brew install vim
+    fi
+}
+
+setting_zsh() {
+    info "setting zsh config..."
+    info "if you have already zsh dotfiles, it will be store in ${ZDOTDIR}/.dotfiles_old"
+    local _zsh_dotfiles=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc")
+    for file in "${_zsh_dotfiles[@]}"; do
+        [ -e "${HOME}/${file}" ] && mv "${HOME}/${file}" "${ZDOTDIR}/${file}_old" >/dev/null 2>&1
+    done
+
+    ln -sf "${ZDOTDIR}/zlogin" "${ZDOTDIR}/.zlogin"
+    ln -sf "${ZDOTDIR}/zlogout" "${ZDOTDIR}/.zlogout"
+    ln -sf "${ZDOTDIR}/zprofile" "${ZDOTDIR}/.zprofile"
+    ln -sf "${ZDOTDIR}/zshenv" "${ZDOTDIR}/.zshenv"
+    ln -sf "${ZDOTDIR}/zshrc" "${ZDOTDIR}/.zshrc"
+
+    # also we place .zshrc in the $HOME
+    ln -sf "${ZDOTDIR}/zshrc" "${HOME}/.zshrc"
+}
+
+setting_vim() {
+    info "setting vim config..."
+    local _vim_dotfiles=(".vim" ".vimrc" ".viminfo")
+    for file in "${_vim_dotfiles[@]}"; do
+        [ -e "${HOME}/${file}" ] && rm -rf "${HOME:?}/${file}" >/dev/null 2>&1
+    done
+
+    mkdir -p "${XDG_DATA_HOME}/vim" && touch "${XDG_DATA_HOME}/vim/viminfo"
+}
+
+setting_tmux() {
+    info "setting tmux config..."
+    [ -e "${HOME}/.tmux.conf" ] && rm -rf "${HOME:?}/.tmux.conf" >/dev/null 2>&1
+}
+
+setting_git() {
+    info "setting git config..."
+    [ -e "${HOME}/.gitconfig" ] && rm -rf "${HOME:?}/.gitconfig" >/dev/null 2>&1
+}
+
+brew_font() {
+    info "checking the font is installed or not..."
+
+    if brew list | grep -q font-hack-nerd-font; then
+        info "Nerd font is installed! skip the install..."
+    else
+        info "not found. so install the hack nerd font..."
+        brew tap homebrew/cask-fonts
+        brew install font-hack-nerd-font
+    fi
+}
+
+install_font() {
+    info "checking the font in installed or not..."
+
+    if fc-list | grep -q HackNerd; then
+        info "Nerd font is installed! skip the install..."
+    else
+        info "not found. so install the hack nerd font..."
+        if [ ! -d "${REPOS_DIR}" ]; then
+            mkdir -p "${REPOS_DIR}"
+        fi
+        git clone --depth 1 "https://github.com/ryanoasis/nerd-fonts.git" "${REPOS_DIR}/nerd_fonts"
+        "${REPOS_DIR}/nerd_fonts/install.sh" Hack --quiet
     fi
 }
 
