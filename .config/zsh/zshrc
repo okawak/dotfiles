@@ -7,3 +7,49 @@ HISTFILE="$XDG_STATE_HOME"/zsh/history
 [ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
 compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-$ZSH_VERSION
+
+setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+
+# emacs key-bind
+bindkey -e
+
+WORDCHARS=${WORDCHARS//[\/]/}
+
+case ${OSTYPE} in
+darwin*)
+    path=(
+        /opt/homebrew/bin(N-/)
+        /opt/homebrew/sbin(N-/)
+        $path
+    )
+    ;;
+linux*) ;;
+esac
+
+# zim setting
+zstyle ':zim:git' aliases-prefix 'g'
+zstyle ':zim:input' double-dot-expand yes
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+    if command -v curl >/dev/null; then
+        curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+            https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+    else
+        mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+            https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+    fi
+fi
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+    source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
+
+# starship setting
+eval "$(starship init zsh)"

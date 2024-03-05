@@ -15,6 +15,16 @@ Still I am a begginer to use it, so I will note how to use from the very basic p
 - (warp: terminal (still testing))
 - yadm: to manage the these dotfiles
 
+## preparation
+
+Add this line for XDG configuration
+
+- /etc/zshenv
+
+```shell
+export ZDOTDIR="${HOME}/.config/zsh"
+```
+
 ## installation
 
 I am using MacOS now, so I installed it by

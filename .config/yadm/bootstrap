@@ -8,7 +8,6 @@ export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
 
-export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 export VIMINIT=":source ${XDG_CONFIG_HOME}/vim/vimrc"
 
 REPOS_DIR="${HOME}/repos"
@@ -49,7 +48,7 @@ main() {
     local _ostype="$RETVAL"
 
     printf "\n"
-    #setting_zsh || return 1
+    setting_zsh || return 1
     #setting_vim || return 1
     #setting_tmux || return 1
     #setting_git || return 1
@@ -395,7 +394,7 @@ brew_install() {
 setting_zsh() {
     info "setting zsh config..."
     info "if you have already zsh dotfiles, it will be store in ${ZDOTDIR}/.dotfiles_old"
-    local _zsh_dotfiles=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc")
+    local _zsh_dotfiles=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc" ".zimrc")
     for file in "${_zsh_dotfiles[@]}"; do
         [ -e "${HOME}/${file}" ] && mv "${HOME}/${file}" "${ZDOTDIR}/${file}_old" >/dev/null 2>&1
     done
@@ -405,9 +404,7 @@ setting_zsh() {
     ln -sf "${ZDOTDIR}/zprofile" "${ZDOTDIR}/.zprofile"
     ln -sf "${ZDOTDIR}/zshenv" "${ZDOTDIR}/.zshenv"
     ln -sf "${ZDOTDIR}/zshrc" "${ZDOTDIR}/.zshrc"
-
-    # also we place .zshrc in the $HOME
-    ln -sf "${ZDOTDIR}/zshrc" "${HOME}/.zshrc"
+    ln -sf "${ZDOTDIR}/zimrc" "${ZDOTDIR}/.zimrc"
 }
 
 setting_vim() {
