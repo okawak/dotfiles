@@ -4,6 +4,17 @@ I am using [yadm](https://yadm.io/#) to manage my setting files.
 
 Still I am a begginer to use it, so I will note how to use from the very basic part.
 
+## My style in MacBook
+
+- zshell: for the shell
+- tmux
+- vim/nvim
+- starship: for the cool prompt
+- zed: text editor and terminal
+- vscode (cursor): text editor and terminal
+- (warp: terminal (still testing))
+- yadm: to manage the these dotfiles
+
 ## installation
 
 I am using MacOS now, so I installed it by
@@ -12,26 +23,16 @@ I am using MacOS now, so I installed it by
 brew install yadm
 ```
 
-Also I have a Linux machine, but I always use it remotely.
-I like the MacOS interface, so it is enough.
+If you are using Linux OS, you can find the information from [yadm](https://yadm.io/#).
 
 ## start to use yadm
 
-From the beggining, I started like
+If you are interested in my dotfiles, you can test with
 
 ```shell
-cd
-yadm init
-yadm add <file>
-yadm commit -m "message"
-yadm remote add origin <url>
-yadm push -u origin <local branch>:<remote branch>
+cd $HOME
+yadm clone <url>
 ```
-
-This is almost the same with normal git repository.
-
-I haven't try `yadm clone <url>` because I have only one MacOS machine, so when I start to manage different machines,
-I will note about it.
 
 ## add or modify the dotfiles
 
@@ -65,24 +66,12 @@ yadm list -a
 
 I will update it when I learn yaml more.
 
-# shell configuration
+# bootstrap
 
-I am using "zsh" shell and [starship](https://starship.rs/) with [warp](https://www.warp.dev/) shell.
-For the MacOS, zsh is default shell and these softwares can be installed by:
+when you clone this repository, you can select to run the bootstrap script or not.
+This script will install important package automatically like
 
-```shell
-brew install --cask warp
-brew install starship
-vi .zshrc
-
-# add this line
-eval "$(starship init zsh)"
-```
-
-## configuration
-
-If you start from the beggining, you need to make "starship.toml" to configure, but you start from "yadm clone", you don't care about it.
-
-```shell
-mkdir -p ~/.config && touch ~/.config/starship.toml
-```
+- zsh
+- starship
+- tmux
+- ...
