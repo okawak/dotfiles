@@ -4,9 +4,10 @@
 
 HISTFILE="$XDG_STATE_HOME"/zsh/history
 # Completion files: Use XDG dirs
-[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
-compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-$ZSH_VERSION
+#[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
+#zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
+#autoload -U compinit
+#compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-$ZSH_VERSION
 
 setopt hist_ignore_dups
 setopt hist_ignore_all_dups
@@ -53,3 +54,7 @@ source ${ZIM_HOME}/init.zsh
 
 # starship setting
 eval "$(starship init zsh)"
+
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'

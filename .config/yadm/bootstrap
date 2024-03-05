@@ -49,9 +49,9 @@ main() {
 
     printf "\n"
     setting_zsh || return 1
-    #setting_vim || return 1
-    #setting_tmux || return 1
-    #setting_git || return 1
+    setting_vim || return 1
+    setting_tmux || return 1
+    setting_git || return 1
 
     case "${_ostype}" in
     MacOS)
