@@ -7,9 +7,10 @@ Still I am a begginer to use it, so I will note how to use from the very basic p
 ## My style in MacBook
 
 - zshell: for the shell
+- [zim](https://zimfw.sh/): for zsh management
+- starship: for the cool prompt
 - tmux
 - vim/nvim
-- starship: for the cool prompt
 - zed: text editor and terminal
 - vscode (cursor): text editor and terminal
 - (warp: terminal (still testing))
