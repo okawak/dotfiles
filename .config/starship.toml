@@ -14,7 +14,6 @@ $hg_branch\
 $pijul_channel\
 $docker_context\
 $package\
-$c\
 $cobol\
 $daml\
 $dart\
@@ -77,7 +76,8 @@ $jobs\
 $status\
 $os\
 $container\
-$shell"""
+$shell\
+$character"""
 
 [username]
 format = '[$user]($style) '
