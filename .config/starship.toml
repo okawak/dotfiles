@@ -87,6 +87,8 @@ ssh_symbol = " "
 format = '[$ssh_symbol$hostname]($style) '
 
 [directory]
+truncation_length = 8
+truncation_symbol = "…/"
 style = "blue"
 truncate_to_repo = false
 read_only = " 󰌾"
