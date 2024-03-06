@@ -70,5 +70,5 @@ fi
 
 # mise setting
 if command -v mise >/dev/null 2>&1; then
-    eval "$(mise init zsh)"
+    eval "$(mise activate zsh)"
 fi
