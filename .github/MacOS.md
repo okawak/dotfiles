@@ -13,3 +13,15 @@ brew install safe-rm
 brew fzf fd bat
 $(brew --prefix)/opt/fzf/install --xdg --key-bindings --completion --update-rc --no-bash --no-fish
 ```
+
+## mise management
+
+```shell
+brew install mise
+```
+
+for the python environment
+
+```shell
+mise use -g python@latest
+```
