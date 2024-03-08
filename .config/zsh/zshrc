@@ -25,8 +25,18 @@ darwin*)
         $path
     )
     ;;
-linux*) ;;
+linux*)
+    # python environment
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    ;;
 esac
+
+path=(
+    ${XDG_BIN_HOME}(N-/)
+    $path
+)
 
 # zim setting
 zstyle ':zim:git' aliases-prefix 'g'
@@ -71,4 +81,29 @@ fi
 # mise setting
 if command -v mise >/dev/null 2>&1; then
     eval "$(mise activate zsh)"
+fi
+
+# rust setting
+if [ -f ${XDG_DATA_HOME}/cargo/env ]; then
+    echo "to update rust, > rustup update"
+    source ${XDG_DATA_HOME}/cargo/env
+fi
+
+# artemis
+if [ -d ${HOME}/art_analysis ]; then
+    # ROOT
+    source ${HOME}/Cern/root/root_install/bin/thisroot.sh >/dev/null 2>&1
+
+    # SRIMLIB
+    source ${HOME}/repos/SRIMlib/thisSRIMlib.sh >/dev/null 2>&1
+
+    # artemis
+    source ${HOME}/repos/artemis/install/bin/thisartemis.sh >/dev/null 2>&1
+    export EXP_NAME="si26a"
+    export EXP_NAME_OLD="develop"
+    path=(
+        ${HOME}/art_analysis/bin
+        $path
+    )
+    source ${HOME}/art_analysis/bin/art_setting -q
 fi

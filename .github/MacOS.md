@@ -20,8 +20,26 @@ $(brew --prefix)/opt/fzf/install --xdg --key-bindings --completion --update-rc -
 brew install mise
 ```
 
-for the python environment
+- python environment
 
 ```shell
 mise use -g python@latest
+```
+
+- Golang environment
+
+```shell
+mise use -g go@latest
+```
+
+- Java environment
+
+```shell
+mise use -g java@latest
+```
+
+- node.js environment
+
+```shell
+mise use -g node@latest
 ```
