@@ -24,8 +24,14 @@ darwin*)
         /opt/homebrew/sbin(N-/)
         $path
     )
+
+    # fzf module configuration
+    [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
     ;;
-linux*) ;;
+linux*)
+    # fzf module configuration
+    [ -f "/usr/share/fzf/shell/key-bindings.zsh" ] && source "/usr/share/fzf/shell/key-bindings.zsh"
+    ;;
 esac
 
 path=(
@@ -69,9 +75,6 @@ unset key
 if command -v starship >/dev/null 2>&1; then
     eval "$(starship init zsh)"
 fi
-
-# fzf module configuration
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
 # mise setting
 if command -v mise >/dev/null 2>&1; then
