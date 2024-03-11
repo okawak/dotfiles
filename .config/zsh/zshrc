@@ -19,11 +19,7 @@ WORDCHARS=${WORDCHARS//[\/]/}
 
 case ${OSTYPE} in
 darwin*)
-    path=(
-        /opt/homebrew/bin(N-/)
-        /opt/homebrew/sbin(N-/)
-        $path
-    )
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 
     # fzf module configuration
     [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
