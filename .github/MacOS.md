@@ -80,14 +80,23 @@ mise use -g node@latest
 
 ## install useful application
 
+note: no need to add `--cask` option now!
+
 ```shell
 # cask
-brew install --cask zed
-brew install --cask visual-studio-code
-brew install --cask warp
-brew install --cask microsoft-outlook
+brew install zed
+brew install visual-studio-code
+brew install warp
+brew install microsoft-outlook
+brew install docker
+brew install vial
+brew install discord
+brew install dropbox
+brew install zoom
+brew install microsoft-teams
 
 brew install htop
+brew install xdg-ninja
 ```
 
 ## remove unused dotfiles
