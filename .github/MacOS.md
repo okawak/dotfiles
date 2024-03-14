@@ -83,18 +83,19 @@ mise use -g node@latest
 note: no need to add `--cask` option now!
 
 ```shell
-# cask
+# cask (GUI application)
 brew install zed
 brew install visual-studio-code
 brew install warp
-brew install microsoft-outlook
+brew install microsoft-outlook microsoft-teams microsoft-excel microsoft-word
 brew install docker
 brew install vial
 brew install discord
 brew install dropbox
 brew install zoom
-brew install microsoft-teams
+brew install zotero
 
+# CLI application
 brew install htop
 brew install xdg-ninja
 ```
