@@ -19,6 +19,7 @@ local plugins = {
     { import = "plugins" },
     { import = "plugins.ui" },
     { import = "plugins.lsp" },
+    { import = "plugins.git" },
   },
 }
 
