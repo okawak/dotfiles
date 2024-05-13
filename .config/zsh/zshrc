@@ -27,6 +27,9 @@ darwin*)
 linux*)
     # fzf module configuration
     [ -f "/usr/share/fzf/shell/key-bindings.zsh" ] && source "/usr/share/fzf/shell/key-bindings.zsh"
+
+    # xdg-ninja script
+    [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}/repos/xdg-ninja/xdg-ninja.sh"
     ;;
 esac
 
@@ -86,7 +89,7 @@ fi
 # artemis
 if [ -d ${HOME}/art_analysis ]; then
     # ROOT
-    source ${HOME}/Cern/root/root_install/bin/thisroot.sh >/dev/null 2>&1
+    source ${HOME}/Cern/ROOT/root_current/bin/thisroot.sh >/dev/null 2>&1
 
     # SRIMLIB
     source ${HOME}/repos/SRIMlib/thisSRIMlib.sh >/dev/null 2>&1
