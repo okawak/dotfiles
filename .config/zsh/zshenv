@@ -12,6 +12,7 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_BIN_HOME="${HOME}/.local/bin"
 export XDG_LIB_HOME="${HOME}/.local/lib"
 export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_RUNTIME_DIR="/run/user/${UID}"
 
 # XDG based software directory
 export AWS_SHARED_CREDENTIALS_FILE="${XDG_CONFIG_HOME}/aws/credentials"
