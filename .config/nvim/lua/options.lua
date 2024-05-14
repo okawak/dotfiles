@@ -2,7 +2,7 @@
 -- see https://zenn.dev/kawarimidoll/articles/18ee967072def7
 vim.treesitter.start = (function(wrapped)
   return function(bufnr, lang)
-    lang = lang or vim.fn.getbufvar(bufnr or '', '&filetype')
+    lang = lang or vim.fn.getbufvar(bufnr or "", "&filetype")
     pcall(wrapped, bufnr, lang)
   end
 end)(vim.treesitter.start)
@@ -15,3 +15,6 @@ vim.opt.fileencoding = "utf-8"
 vim.opt.number = true
 vim.opt.list = true
 vim.wo.wrap = false
+
+-- set color
+vim.opt.termguicolors = true

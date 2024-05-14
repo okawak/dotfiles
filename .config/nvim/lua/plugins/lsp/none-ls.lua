@@ -14,6 +14,11 @@ return {
         null_ls.builtins.formatting.shfmt,
         -- python
         null_ls.builtins.formatting.black,
+        -- markdown
+        null_ls.builtins.formatting.markdownlint,
+        null_ls.builtins.formatting.cbfmt,
+        -- lua
+        null_ls.builtins.formatting.stylua,
       },
       on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
