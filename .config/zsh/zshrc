@@ -30,6 +30,9 @@ linux*)
 
     # xdg-ninja script
     [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}/repos/xdg-ninja/xdg-ninja.sh"
+
+    # neovim
+    [ -f "${HOME}/.local/nvim/bin/nvim" ] && alias vi="${HOME}/.local/nvim/bin/nvim"
     ;;
 esac
 
