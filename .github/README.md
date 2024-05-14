@@ -2,8 +2,6 @@
 
 I am using [yadm](https://yadm.io/#) to manage my setting files.
 
-Still I am a begginer to use it, so I will note how to use from the very basic part.
-
 ## My style in MacBook
 
 - zshell: for the shell
@@ -13,7 +11,7 @@ Still I am a begginer to use it, so I will note how to use from the very basic p
 - vim/nvim
 - zed: text editor and terminal
 - vscode (cursor): text editor and terminal
-- (warp: terminal (still testing))
+- wezterm: for main terminal
 - yadm: to manage the these dotfiles
 
 ## preparation

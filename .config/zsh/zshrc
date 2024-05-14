@@ -70,6 +70,14 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
+# command aliases
+alias cp="cp -i"
+alias mv="mv -i"
+if command -v nvim >/dev/null 2>&1; then
+    alias vi="nvim"
+    alias nim="nvim"
+fi
+
 # starship setting
 if command -v starship >/dev/null 2>&1; then
     eval "$(starship init zsh)"
