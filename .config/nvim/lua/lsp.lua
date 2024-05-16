@@ -39,14 +39,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 require("mason").setup()
 require("mason-lspconfig").setup({
   ensure_installed = {
-    "black",
-    "cbfmt",
-    "clang-format",
     "clangd",
-    "lua-ls",
-    "markdownlint",
-    "shfmt",
-    "stylua",
+    "lua_ls",
   },
 })
 require("mason-lspconfig").setup_handlers({
