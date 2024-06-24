@@ -13,6 +13,7 @@ return {
         "cbfmt",
         "clang-format",
         "markdownlint",
+        "prettierd",
         "shfmt",
         "stylua",
       },

@@ -93,7 +93,6 @@ fi
 
 # rust setting
 if [ -f ${XDG_DATA_HOME}/cargo/env ]; then
-    echo "to update rust, > rustup update"
     source ${XDG_DATA_HOME}/cargo/env
 fi
 
@@ -115,3 +114,19 @@ if [ -d ${HOME}/art_analysis ]; then
     )
     source ${HOME}/art_analysis/bin/art_setting -q
 fi
+
+update_all() {
+    if command -v brew >/dev/null 2>&1; then
+        brew update
+    fi
+
+    if command -v mise >/dev/null 2>&1; then
+        mise upgrade
+    fi
+
+    if command -v rustup >/dev/null 2>&1; then
+        rustup update
+    fi
+}
+
+

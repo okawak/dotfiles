@@ -1,5 +1,6 @@
 return {
-  "nvimtools/none-ls.nvim", dependencies = { "nvim-lua/plenary.nvim" },
+  "nvimtools/none-ls.nvim",
+  dependencies = { "nvim-lua/plenary.nvim" },
   config = function()
     local null_ls = require("null-ls")
     local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -19,6 +20,14 @@ return {
         null_ls.builtins.formatting.cbfmt,
         -- lua
         null_ls.builtins.formatting.stylua,
+
+        -- web (http, js, ts and so on...)
+        null_ls.builtins.formatting.prettierd.with({
+          condition = function(utils)
+            return utils.has_file({ ".prettierrc", ".prettierrc.js" })
+          end,
+          prefer_local = "node_modules/.bin",
+        }),
       },
       on_attach = function(client, bufnr)
         if client.supports_method("textDocument/formatting") then
@@ -38,5 +47,5 @@ return {
         end
       end,
     })
-  end
+  end,
 }
