@@ -129,4 +129,6 @@ update_all() {
     fi
 }
 
-
+vscode_setting() {
+    git clone git@github.com:okawak/dot_vscode.git ./.vscode
+}
