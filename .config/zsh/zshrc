@@ -96,12 +96,12 @@ if [ -f ${XDG_DATA_HOME}/cargo/env ]; then
     source ${XDG_DATA_HOME}/cargo/env
 fi
 
-# dotnet setting
-if command -v dotnet >/dev/null 2>&1; then
-path=(
-    ${XDG_DATA_HOME}/dotnet/.dotnet/tools(N-/)
-    $path
-)
+# npm tools
+if command -v mise >/dev/null 2>&1; then
+    path=(
+        ${XDG_DATA_HOME}/npm/bin
+        $path
+    )
 fi
 
 # artemis
@@ -123,6 +123,7 @@ if [ -d ${HOME}/art_analysis ]; then
     source ${HOME}/art_analysis/bin/art_setting -q
 fi
 
+# usefull macro
 update_all() {
     if command -v brew >/dev/null 2>&1; then
         brew update

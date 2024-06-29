@@ -1,3 +1,5 @@
 #
 #  ~/.zlogin
 #
+
+figlet "okawak!"

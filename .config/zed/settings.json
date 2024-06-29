@@ -247,7 +247,7 @@
         ///
         /// 1. "disabled"
         /// 2. "indent_aware"
-        "background_coloring": "indent_aware"
+        "background_coloring": "disabled"
     },
     // The number of lines to keep above/below the cursor when scrolling.
     "vertical_scroll_margin": 3,
