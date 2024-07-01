@@ -9,10 +9,25 @@ email = kodak2022@outlook.jp
 
 [core]
 editor = vim
+pager = delta
 autocrlf = input
 safecrlf = true
 # prevent garbled text (mainly for Japanese)
 quotepath = false
+
+[interactive]
+diffFilter = delta --color-only
+
+[delta]
+navigate = true    # use n and N to move between diff sections
+side-by-side = true
+
+# delta detects terminal colors automatically; set one of these to disable auto-detection
+dark = true
+# light = true
+
+[diff]
+colorMoved = default
 
 # git fetch --prune, delete the branch that deleted in remote
 [fetch]
@@ -25,6 +40,7 @@ ff = only
 # git merge --no-ff, make merge commit
 [merge]
 ff = false
+conflictstyle = diff3
 
 [push]
 default = simple
