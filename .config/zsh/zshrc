@@ -2,6 +2,8 @@
 #  ~/.zshrc
 #
 
+typeset -U PATH
+
 HISTFILE="$XDG_STATE_HOME"/zsh/history
 # Completion files: Use XDG dirs
 #[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
@@ -96,12 +98,24 @@ if [ -f ${XDG_DATA_HOME}/cargo/env ]; then
     source ${XDG_DATA_HOME}/cargo/env
 fi
 
-# npm tools
+# npm tools installed globally
 if command -v mise >/dev/null 2>&1; then
     path=(
-        ${XDG_DATA_HOME}/npm/bin
+        ${XDG_DATA_HOME}/npm/bin(N-/)
         $path
     )
+fi
+
+# Load Angular CLI autocompletion.
+if command -v ng >/dev/null 2>&1; then
+    if ! command -v node >/dev/null 2>&1; then
+        # need to specify the node path
+        path=(
+            ${XDG_DATA_HOME}/mise/installs/node/latest/bin(N-/)
+            $path
+        )
+    fi
+    source <(ng completion script)
 fi
 
 # artemis
@@ -117,29 +131,10 @@ if [ -d ${HOME}/art_analysis ]; then
     export EXP_NAME="si26a"
     export EXP_NAME_OLD="develop"
     path=(
-        ${HOME}/art_analysis/bin
+        ${HOME}/art_analysis/bin(N-/)
         $path
     )
     source ${HOME}/art_analysis/bin/art_setting -q
 fi
-
-# usefull macro
-update_all() {
-    if command -v brew >/dev/null 2>&1; then
-        brew update
-    fi
-
-    if command -v mise >/dev/null 2>&1; then
-        mise upgrade
-    fi
-
-    if command -v rustup >/dev/null 2>&1; then
-        rustup update
-    fi
-}
-
-vscode_setting() {
-    git clone git@github.com:okawak/dot_vscode.git ./.vscode
-}
 
 unset NO_COLOR
