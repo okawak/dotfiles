@@ -2,6 +2,8 @@
 #  ~/.zshrc
 #
 
+typeset -U PATH
+
 HISTFILE="$XDG_STATE_HOME"/zsh/history
 # Completion files: Use XDG dirs
 #[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
@@ -29,10 +31,10 @@ linux*)
     [ -f "/usr/share/fzf/shell/key-bindings.zsh" ] && source "/usr/share/fzf/shell/key-bindings.zsh"
 
     # xdg-ninja script
-    [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}/repos/xdg-ninja/xdg-ninja.sh"
+    [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}"/repos/xdg-ninja/xdg-ninja.sh
 
     # neovim
-    [ -f "${HOME}/.local/nvim/bin/nvim" ] && alias vi="${HOME}/.local/nvim/bin/nvim"
+    [ -f "${HOME}/.local/nvim/bin/nvim" ] && alias vi="${HOME}"/.local/nvim/bin/nvim
     ;;
 esac
 
@@ -47,23 +49,23 @@ zstyle ':zim:input' double-dot-expand yes
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
-ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+ZIM_HOME="${ZDOTDIR:-${HOME}}"/.zim
 # Download zimfw plugin manager if missing.
-if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+if [[ ! -e "${ZIM_HOME}"/zimfw.zsh ]]; then
     if command -v curl >/dev/null; then
-        curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+        curl -fsSL --create-dirs -o "${ZIM_HOME}"/zimfw.zsh \
             https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
     else
-        mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+        mkdir -p "${ZIM_HOME}" && wget -nv -O "${ZIM_HOME}"/zimfw.zsh \
             https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
     fi
 fi
 # Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
-if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
-    source ${ZIM_HOME}/zimfw.zsh init -q
+if [[ ! "${ZIM_HOME}"/init.zsh -nt "${ZDOTDIR:-${HOME}}"/.zimrc ]]; then
+    source "${ZIM_HOME}"/zimfw.zsh init -q
 fi
 # Initialize modules.
-source ${ZIM_HOME}/init.zsh
+source "${ZIM_HOME}"/init.zsh
 
 zmodload -F zsh/terminfo +p:terminfo
 # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
@@ -96,16 +98,28 @@ if command -v mise >/dev/null 2>&1; then
 fi
 
 # rust setting
-if [ -f ${XDG_DATA_HOME}/cargo/env ]; then
-    source ${XDG_DATA_HOME}/cargo/env
+if [ -f "${XDG_DATA_HOME}"/cargo/env ]; then
+    source "${XDG_DATA_HOME}"/cargo/env
 fi
 
-# npm tools
+# npm tools installed globally
 if command -v mise >/dev/null 2>&1; then
     path=(
-        ${XDG_DATA_HOME}/npm/bin
+        ${XDG_DATA_HOME}/npm/bin(N-/)
         $path
     )
+fi
+
+# Load Angular CLI autocompletion.
+if command -v ng >/dev/null 2>&1; then
+    if ! command -v node >/dev/null 2>&1; then
+        # need to specify the node path
+        path=(
+            ${XDG_DATA_HOME}/mise/installs/node/latest/bin(N-/)
+            $path
+        )
+    fi
+    source <(ng completion script)
 fi
 
 # artemis
@@ -115,13 +129,15 @@ if [ -d ${HOME}/art_analysis ]; then
 
     # SRIMLIB
     source ${HOME}/repos/SRIMlib/thisSRIMlib.sh >/dev/null 2>&1
+    # TSrim
+    source ${HOME}/repos/tsrim/install/thisTSrim.sh >/dev/null 2>&1
 
     # artemis
     source ${HOME}/repos/artemis/install/bin/thisartemis.sh >/dev/null 2>&1
     export EXP_NAME="si26a"
     export EXP_NAME_OLD="develop"
     path=(
-        ${HOME}/art_analysis/bin
+        ${HOME}/art_analysis/bin(N-/)
         $path
     )
     source ${HOME}/art_analysis/bin/art_setting -q
