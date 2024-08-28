@@ -37,7 +37,7 @@ linux*)
 esac
 
 path=(
-    ${XDG_BIN_HOME}(N-/)
+    ${XDG_BIN_HOME}
     $path
 )
 
@@ -89,6 +89,10 @@ fi
 # mise setting
 if command -v mise >/dev/null 2>&1; then
     eval "$(mise activate zsh)"
+    path=(
+        ${XDG_DATA_HOME}/python/bin
+        $path
+    )
 fi
 
 # rust setting
@@ -123,23 +127,5 @@ if [ -d ${HOME}/art_analysis ]; then
     source ${HOME}/art_analysis/bin/art_setting -q
 fi
 
-# usefull macro
-update_all() {
-    if command -v brew >/dev/null 2>&1; then
-        brew update
-    fi
-
-    if command -v mise >/dev/null 2>&1; then
-        mise upgrade
-    fi
-
-    if command -v rustup >/dev/null 2>&1; then
-        rustup update
-    fi
-}
-
-vscode_setting() {
-    git clone git@github.com:okawak/dot_vscode.git ./.vscode
-}
-
 unset NO_COLOR
+
