@@ -130,7 +130,7 @@ if [ -d ${HOME}/art_analysis ]; then
     # SRIMLIB
     source ${HOME}/repos/SRIMlib/thisSRIMlib.sh >/dev/null 2>&1
     # TSrim
-    source ${HOME}/repos/tsrim/install/thisTSrim.sh >/dev/null 2>&1
+    source ${HOME}/repos/tsrim/install/bin/thisTSrim.sh >/dev/null 2>&1
 
     # artemis
     source ${HOME}/repos/artemis/install/bin/thisartemis.sh >/dev/null 2>&1
