@@ -17,10 +17,12 @@ brew "fzf"
 brew "git"
 brew "git-delta"
 brew "htop"
+brew "hugo"
 brew "mas"
 brew "mise"
 brew "mono-libgdiplus"
 brew "neovim", args: ["HEAD"]
+brew "oci-cli"
 brew "php"
 brew "ripgrep"
 brew "safe-rm"
@@ -29,8 +31,8 @@ brew "tmux"
 brew "tree"
 brew "xdg-ninja"
 brew "yadm"
+brew "zlib"
 brew "hashicorp/tap/terraform"
-cask "amazon-photos"
 cask "arc"
 cask "balenaetcher"
 cask "cursor"
@@ -48,6 +50,7 @@ cask "microsoft-word"
 cask "mono-mdk"
 cask "raspberry-pi-imager"
 cask "slack"
+cask "spotify"
 cask "vial"
 cask "visual-studio-code"
 cask "vnc-viewer"
@@ -61,5 +64,6 @@ cask "zotero"
 mas "GarageBand", id: 682658836
 mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
+mas "Kindle", id: 302584613
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
