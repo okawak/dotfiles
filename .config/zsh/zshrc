@@ -24,7 +24,7 @@ darwin*)
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
     # fzf module configuration
-    [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && eval "$(fzf --zsh)"
+    [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source <(fzf --zsh)
     ;;
 linux*)
     # fzf module configuration
