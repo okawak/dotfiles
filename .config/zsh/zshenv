@@ -15,6 +15,7 @@ export XDG_CACHE_HOME="${HOME}"/.cache
 export XDG_RUNTIME_DIR=/run/user/"${UID}"
 
 # XDG based software directory
+export ANDROID_USER_HOME="${XDG_DATA_HOME}"/android
 export ANSIBLE_HOME="${XDG_DATA_HOME}"/ansible
 export AWS_SHARED_CREDENTIALS_FILE="${XDG_CONFIG_HOME}"/aws/credentials
 export AWS_CONFIG_FILE="${XDG_CONFIG_HOME}"/aws/config

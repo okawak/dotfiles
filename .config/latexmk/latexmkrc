@@ -1,37 +1,77 @@
 #!/usr/bin/env perl
 
-# LaTeX
-#$latex = 'platex -synctex=1 -halt-on-error -file-line-error %O %S';
-$latex = 'pdflatex -synctex=1 -halt-on-error -file-line-error %O %S';
-#$latex = 'xelatex -synctex=1 -halt-on-error -file-line-error %O %S';
+# LaTeXエンジンの設定
+$latex      = 'uplatex %O -kanji=utf8 -no-guess-input-enc -synctex=1 -interaction=nonstopmode %S';
+$pdflatex   = 'pdflatex %O -synctex=1 -interaction=nonstopmode %S';
+$lualatex   = 'lualatex %O -synctex=1 -interaction=nonstopmode %S';
+$xelatex    = 'xelatex %O -synctex=1 -interaction=nonstopmode %S';
 $max_repeat = 5;
 
-# BibTeX
-#$bibtex = 'pbibtex %O %S';
-$bibtex = 'bibtex %O %S';
-$biber = 'biber --bblencoding=utf8 -u -U --output_safechars %O %S';
+# 文献管理ツール
+$biber      = 'biber %O --bblencoding=utf8 -u -U --output_safechars %B';
+$bibtex     = 'bibtexu %O %B';
 
-# index
-#$makeindex = 'mendex %O -o %D %S';
-$makeindex = 'makeindex %O -o %D %S';
+# 索引作成ツール
+$makeindex  = 'upmendex %O -o %D %S';
 
-# DVI / PDF
-#$dvipdf = 'dvipdfmx %O -o %D %S';
-#$pdf_mode = 3;
-$pdf_mode = 1;
+# DVIからPDFへの変換
+$dvipdf     = 'dvipdfmx %O -o %D %S';
 
-# preview
-$pvc_view_file_via_temporary = 0;
-if ($^O eq 'linux') {
-    #$dvi_previewer = "xdg-open %S";
-    $pdf_previewer = "xdg-open %S";
-} elsif ($^O eq 'darwin') {
-    #$dvi_previewer = "open %S";
-    $pdf_previewer = "open %S";
+# DVIからPSへの変換
+if (`which convbkmk`) {
+    $dvips = 'dvips %O -z -f %S | convbkmk -u > %D';
 } else {
-    #$dvi_previewer = "start %S";
-    $pdf_previewer = "start %S";
+    $dvips = 'dvips %O -f %S > %D';
 }
 
-# clean up
-$clean_full_ext = "%R.synctex.gz"
+# ps2pdfの設定（Windowsの場合はGhostscriptを使用）
+if ($^O eq 'MSWin32') {
+    $ps2pdf = 'gswin64c -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=%D %O %S';
+} else {
+    $ps2pdf = 'ps2pdf %O %S %D';
+}
+
+# $pdf_mode = 0; PDF を作成しない。
+# $pdf_mode = 1; $pdflatex を利用して PDF を作成。
+# $pdf_mode = 2; $ps2pdf を利用して .ps ファイルから PDF を作成。
+# $pdf_mode = 3; $dvipdf を利用して .dvi ファイルから PDF を作成。
+# $pdf_mode = 4; $lualatex を利用して PDF を作成。
+# $pdf_mode = 5; $xelatex を利用して PDF を作成。
+$pdf_mode = 3;
+
+# 一時ファイルの拡張子
+@generated_exts = qw(aux bbl blg idx ilg ind lof log lot out toc fls fdb_latexmk synctex.gz);
+
+# エラー時の処理
+$failure_cmd = "echo Compilation failed";
+
+# 詳細なログの取得
+$diagnostics = 1;
+
+# PDFビューアの設定
+$preview_continuous_mode = 0;
+$pvc_view_file_via_temporary = 0;
+#$pdf_previewer = "";
+if ($^O eq 'MSWin32') {
+    if (-f 'C:/Program Files/SumatraPDF/SumatraPDF.exe') {
+        $pdf_previewer = "\"C:/Program Files/SumatraPDF/SumatraPDF.exe\" -reuse-instance %S";
+    } elsif (-f 'C:/Program Files (x86)/SumatraPDF/SumatraPDF.exe') {
+        $pdf_previewer = "\"C:/Program Files (x86)/SumatraPDF/SumatraPDF.exe\" -reuse-instance %S";
+    } else {
+        $pdf_previewer = 'texworks %S';
+    }
+} elsif ($^O eq 'darwin') {
+    if (-d '/Applications/Skim.app') {
+        $pdf_previewer = 'open -ga /Applications/Skim.app %S';
+    } else {
+        $pdf_previewer = 'open %S';
+    }
+} else {
+    $pdf_previewer = 'xdg-open %S';
+}
+
+# 一時ファイルのクリーンアップコマンド
+add_cus_dep('clean', '', 0, sub {
+    system("latexmk -c");
+});
+
