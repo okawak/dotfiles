@@ -44,7 +44,7 @@ path=(
 )
 
 # zim setting
-zstyle ':zim:git' aliases-prefix 'g'
+zstyle ':zim:git' aliases-prefix 'G'
 zstyle ':zim:input' double-dot-expand yes
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
