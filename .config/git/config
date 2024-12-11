@@ -44,3 +44,10 @@ conflictstyle = diff3
 
 [push]
 default = simple
+
+[ghq]
+root = ~/ghq
+
+[url "git@github.com:"]
+pushInsteadOf = https://github.com/
+

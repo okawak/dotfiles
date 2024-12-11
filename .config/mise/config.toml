@@ -5,6 +5,8 @@ node = 'lts'
 java = 'latest'
 go = 'latest'
 python = "3.12"
+ghq = "latest"
+terraform = "latest"
 
 [settings]
 # plugins can read the versions files used by other version managers (if enabled by the plugin)
