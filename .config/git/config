@@ -51,3 +51,5 @@ root = ~/ghq
 [url "git@github.com:"]
 pushInsteadOf = https://github.com/
 
+[url "git@github.com:okawak"]
+insteadOf = https://github.com/okawak
