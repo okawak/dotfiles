@@ -7,6 +7,11 @@ go = 'latest'
 python = "3.12"
 ghq = "latest"
 terraform = "latest"
+starship = "latest"
+neovim = "latest"
+fzf = "latest"
+delta = "latest"
+bottom = "latest"
 
 [settings]
 # plugins can read the versions files used by other version managers (if enabled by the plugin)

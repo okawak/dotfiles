@@ -19,29 +19,23 @@ bindkey -e
 
 WORDCHARS=${WORDCHARS//[\/]/}
 
+# path to homebrew for macos
 case ${OSTYPE} in
 darwin*)
     eval "$(/opt/homebrew/bin/brew shellenv)"
-
-    # fzf module configuration
-    [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source <(fzf --zsh)
-    ;;
-linux*)
-    # fzf module configuration
-    [ -f "/usr/share/fzf/shell/key-bindings.zsh" ] && source "/usr/share/fzf/shell/key-bindings.zsh"
-
-    # xdg-ninja script
-    [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}"/repos/xdg-ninja/xdg-ninja.sh
-
-    # neovim
-    [ -f "${HOME}/.local/nvim/bin/nvim" ] && alias vi="${HOME}"/.local/nvim/bin/nvim
     ;;
 esac
 
+# XDG bin path
 path=(
     ${XDG_BIN_HOME}
     $path
 )
+
+# mise setting
+if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate zsh)"
+fi
 
 # zim setting
 zstyle ':zim:git' aliases-prefix 'G'
@@ -78,23 +72,29 @@ unset key
 # command aliases
 alias cp="cp -i"
 alias mv="mv -i"
+
+# neovim setting
 if command -v nvim >/dev/null 2>&1; then
     alias vi="nvim"
     alias nim="nvim"
 fi
 
+# fzf setting
+if command -v fzf >/dev/null 2>&1; then
+    source <(fzf --zsh)
+fi
+
+
+# xdg-ninja script
+case ${OSTYPE} in
+linux*)
+    [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}"/repos/xdg-ninja/xdg-ninja.sh
+    ;;
+esac
+
 # starship setting
 if command -v starship >/dev/null 2>&1; then
     eval "$(starship init zsh)"
-fi
-
-# mise setting
-if command -v mise >/dev/null 2>&1; then
-    eval "$(mise activate zsh)"
-    path=(
-        ${XDG_DATA_HOME}/python/bin
-        $path
-    )
 fi
 
 # rust setting
@@ -145,9 +145,9 @@ fi
 
 # ghq search and move to it
 ghq-fzf() {
-  local src=$(ghq list | fzf --preview "ls -laTp $(ghq root)/{} | tail -n+4 | awk '{print \$9\"/\"\$6\"/\"\$7 \" \" \$10}'")
+  local src=$(ghq list --full-path --exact | fzf --preview "ls -laTp {} | tail -n+4 | awk '{print \$9\"/\"\$6\"/\"\$7 \" \" \$10}'")
   if [ -n "$src" ]; then
-    BUFFER="cd $(ghq root)/$src"
+    BUFFER="cd $src"
     zle accept-line
   fi
   zle -R -c

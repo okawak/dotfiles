@@ -46,7 +46,16 @@ conflictstyle = diff3
 default = simple
 
 [ghq]
-root = ~/ghq
+root = ~/repos
+
+[ghq "https://github.com/okawak"]
+root = ~/hobby
+
+[ghq "https://github.com/CRIB-project"]
+root = ~/crib
+
+[ghq "https://www.cns.s.u-tokyo.ac.jp"]
+root = ~/crib
 
 [url "git@github.com:"]
 pushInsteadOf = https://github.com/
