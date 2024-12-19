@@ -2,486 +2,165 @@
 
 set -eu
 
-# Set XDG directories.
+########################################
+# Verify ZDOTDIR environment variable
+########################################
+if [ -z "${ZDOTDIR:-}" ]; then
+    printf "error: ZDOTDIR is not defined. Please set it before running this script.\n" >&2
+    exit 1
+fi
+
+########################################
+# Environment Setup
+########################################
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
-
 export VIMINIT=":source ${XDG_CONFIG_HOME}/vim/vimrc"
 
-REPOS_DIR="${HOME}/repos"
+########################################
+# Color and Formatting Setup
+########################################
+init_colors() {
+    if ! command -v tput >/dev/null 2>&1; then
+        printf "error: 'tput' command not found, cannot set colors.\n"
+        exit 1
+    fi
 
-# output format
-if ! command -v tput >/dev/null 2>&1; then
-    printf "need 'tput' (command not found)\n"
-    exit 1
-fi
-# shellcheck disable=SC2034
-bold="$(tput bold 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-gray="$(tput setaf 0 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-underline="$(tput smul 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-red="$(tput setaf 1 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-green="$(tput setaf 2 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-yellow="$(tput setaf 3 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-blue="$(tput setaf 4 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-magenta="$(tput setaf 5 2>/dev/null || printf '')"
-# shellcheck disable=SC2034
-no_format="$(tput sgr0 2>/dev/null || printf '')"
-
-# main structure
-main() {
-    need_cmd uname
-    need_cmd ln
-    need_cmd mkdir
-    need_cmd fc-list
-
-    printf "\n"
-    initialize_for_each_ostype || return 1
-    local _ostype="$RETVAL"
-
-    printf "\n"
-    setting_zsh || return 1
-    setting_vim || return 1
-    setting_tmux || return 1
-    setting_git || return 1
-
-    printf "\n"
-    case "${_ostype}" in
-    MacOS)
-        brew_font
-        ;;
-    *)
-        install_font
-        ;;
-    esac
-
-    printf "\n"
-    printf "%b%bComplete the %s initial setting!%b\n" "${underline}" "${bold}" "${_ostype}" "${no_format}"
-    printf "please relogin the shell to apply changes!\n\n"
+    # Use shellcheck disable since some vars may not be used directly.
+    # shellcheck disable=SC2034
+    bold="$(tput bold 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    underline="$(tput smul 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    red="$(tput setaf 1 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    green="$(tput setaf 2 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    yellow="$(tput setaf 3 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    blue="$(tput setaf 4 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    magenta="$(tput setaf 5 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    gray="$(tput setaf 0 2>/dev/null || printf '')"
+    # shellcheck disable=SC2034
+    no_format="$(tput sgr0 2>/dev/null || printf '')"
 }
 
-initialize_for_each_ostype() {
-    local _ostype
-    _ostype="$(uname -s)"
+########################################
+# Utility Functions
+########################################
 
-    case "$_ostype" in
-    Linux)
-        if [ -f "/etc/os-release" ]; then
-            # shellcheck disable=SC1091
-            source "/etc/os-release"
-            case "$NAME" in
-            *Alma*)
-                rpm_install
-                _ostype=AlmaLinux
-                ;;
-            *Amazon*)
-                rpm_install
-                _ostype=AmazonLinux
-                ;;
-            *Arch*)
-                _ostype=ArchLinux
-                warn "currently not support for $_ostype"
-                exit 1
-                ;;
-            *Debian*)
-                deb_install
-                _ostype=Debian
-                ;;
-            *Manjaro*)
-                _ostype=ManjaroLinux
-                warn "currently not support for $_ostype"
-                exit 1
-                ;;
-            *Raspbian*)
-                deb_install
-                _ostype=Raspbian
-                ;;
-            *Rocky*)
-                rpm_install
-                _ostype=RockyLinux
-                ;;
-            *Ubuntu*)
-                deb_install
-                _ostype=Ubuntu
-                ;;
-            *)
-                err "Unexpected Linux distribution: $_ostype"
-                ;;
-            esac
-        else
-            err "could not find /etc/os-release file..."
-        fi
-        ;;
-    Darwin)
-        brew_install
-        _ostype=MacOS
-        ;;
-    windows32)
-        # windows OS don't support zsh shell? (not WSL2)
-        _ostype=Windows
-        err "Currently not support $_ostype"
-        ;;
-    *)
-        err "unrecognized OS type: $_ostype"
-        ;;
-    esac
-
-    RETVAL="$_ostype"
-}
-
-rpm_install() {
-    need_cmd dnf
-
-    if check_cmd starship; then
-        info "we have starship! skip the install..."
-    else
-        local _answer
-        while true; do
-            read -rp "install starship now? (y/n): " _answer
-            case ${_answer} in
-            y)
-                sudo dnf update
-                sudo dnf copr enable atim/starship
-                sudo dnf install starship
-                break
-                ;;
-            n)
-                info "skip to install startship..."
-                info "you can install it by:"
-                blue_msg "sudo dnf copr enable atim/starship"
-                blue_msg "sudo dnf install starship"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    if check_cmd zsh; then
-        info "we have zsh! skip the install..."
-    else
-        local _answer
-        while true; do
-            read -rp "install zsh now? (y/n): " _answer
-            case ${_answer} in
-            y)
-                sudo dnf install zsh
-                break
-                ;;
-            n)
-                info "skip to install zsh..."
-                info "you can install it by"
-                blue_msg "sudo dnf install zsh"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    if check_cmd zsh && [ "${SHELL##*/}" = "zsh" ]; then
-        info "defalut shell is zsh! skip the setting..."
-    else
-        local _answer
-        while true; do
-            read -rp "change default shell to zsh now? (y/n) " _answer
-            case ${_answer} in
-            y)
-                if check_cmd chsh; then
-                    chsh -s "$(command -v zsh)"
-                else
-                    sudo dnf install util-linux-user
-                    chsh -s "$(command -v zsh)"
-                fi
-                break
-                ;;
-            n)
-                info "skip to change default shell to zsh"
-                info "you can change it by"
-                blue_msg "chsh -s /bin/zsh (the path can be confirmed by \"command -v zsh\" or \"which zsh\")"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    printf "\n"
-    info "Install the important command, git, tmux, vim..."
-    if check_cmd git; then
-        info "we have git! skip the install..."
-    else
-        sudo dnf install git
-    fi
-
-    if check_cmd tmux; then
-        info "we have tmux! skip the install..."
-    else
-        sudo dnf install tmux
-    fi
-
-    if check_cmd vim; then
-        info "we have vim! skip the install..."
-    else
-        sudo dnf install vim
-    fi
-}
-
-deb_install() {
-    need_cmd apt
-    need_cmd curl
-
-    if check_cmd starship; then
-        info "we have starship! skip the install..."
-    else
-        local _answer
-        warn "currently apt package manager does not support starship"
-        while true; do
-            read -rp "install now from the source? (y/n): " _answer
-            case ${_answer} in
-            y)
-                curl -sS https://starship.rs/install.sh | sh
-                break
-                ;;
-            n)
-                info "skip to install startship..."
-                info "you can install it by:"
-                blue_msg "curl -sS https://starship.rs/install.sh | sh"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    if check_cmd zsh; then
-        info "we have zsh! skip the install..."
-    else
-        local _answer
-        while true; do
-            read -rp "install zsh now? (y/n): " _answer
-            case ${_answer} in
-            y)
-                sudo apt install zsh
-                break
-                ;;
-            n)
-                info "skip to install zsh..."
-                info "you can install it by"
-                blue_msg "sudo apt install zsh"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    if check_cmd zsh && [ "${SHELL##*/}" = "zsh" ]; then
-        info "defalut shell is zsh! skip the setting..."
-    else
-        local _answer
-        while true; do
-            read -rp "change default shell to zsh now? (y/n) " _answer
-            case ${_answer} in
-            y)
-                need_cmd chsh
-                chsh -s "$(command -v zsh)"
-                break
-                ;;
-            n)
-                info "skip to change default shell to zsh"
-                info "you can change it by"
-                blue_msg "chsh -s /bin/zsh (the path can be confirmed by \"command -v zsh\" or \"which zsh\")"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    printf "\n"
-    info "Install the important command, git, tmux, vim..."
-    if check_cmd git; then
-        info "we have git! skip the install..."
-    else
-        sudo apt install git
-    fi
-
-    if check_cmd tmux; then
-        info "we have tmux! skip the install..."
-    else
-        sudo apt install tmux
-    fi
-
-    if check_cmd vim; then
-        info "we have vim! skip the install..."
-    else
-        sudo apt install vim
-    fi
-}
-
-brew_install() {
-    need_cmd brew
-    need_cmd zsh # default shell of macOS is zsh
-
-    if check_cmd starship; then
-        info "we have starship! skip the install..."
-    else
-        local _answer
-        while true; do
-            read -rp "install starship now? (y/n): " _answer
-            case ${_answer} in
-            y)
-                brew update
-                brew install starship
-                break
-                ;;
-            n)
-                info "skip to install startship..."
-                info "you can install it by:"
-                blue_msg "brew install starship"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    if [ "${SHELL##*/}" = "zsh" ]; then
-        info "defalut shell is zsh! skip the setting..."
-    else
-        local _answer
-        warn "it will change the default shell to /bin/zsh. if you want to use zsh from homebrew, you need to skip it"
-        while true; do
-            read -rp "change default shell to zsh now? (y/n) " _answer
-            case ${_answer} in
-            y)
-                need_cmd chsh
-                chsh -s "$(command -v zsh)"
-                break
-                ;;
-            n)
-                info "skip to change default shell to zsh"
-                info "you can change it by"
-                blue_msg "chsh -s /bin/zsh (the path can be confirmed by \"command -v zsh\" or \"which zsh\")"
-                break
-                ;;
-            esac
-        done
-    fi
-
-    printf "\n"
-    info "Install the important command, git, tmux, vim..."
-    if check_cmd git; then
-        info "we have git! skip the install..."
-    else
-        brew install git
-    fi
-
-    if check_cmd tmux; then
-        info "we have tmux! skip the install..."
-    else
-        brew install tmux
-    fi
-
-    if check_cmd vim; then
-        info "we have vim! skip the install..."
-    else
-        brew install vim
-    fi
-}
-
-setting_zsh() {
-    info "setting zsh config..."
-    info "if you have already zsh dotfiles, it will be store in ${ZDOTDIR}/.dotfiles_old"
-    local _zsh_dotfiles=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc" ".zimrc")
-    for file in "${_zsh_dotfiles[@]}"; do
-        [ -e "${HOME}/${file}" ] && mv "${HOME}/${file}" "${ZDOTDIR}/${file}_old" >/dev/null 2>&1
-    done
-
-    ln -sf "${ZDOTDIR}/zlogin" "${ZDOTDIR}/.zlogin"
-    ln -sf "${ZDOTDIR}/zlogout" "${ZDOTDIR}/.zlogout"
-    ln -sf "${ZDOTDIR}/zprofile" "${ZDOTDIR}/.zprofile"
-    ln -sf "${ZDOTDIR}/zshenv" "${ZDOTDIR}/.zshenv"
-    ln -sf "${ZDOTDIR}/zshrc" "${ZDOTDIR}/.zshrc"
-    ln -sf "${ZDOTDIR}/zimrc" "${ZDOTDIR}/.zimrc"
-}
-
-setting_vim() {
-    info "setting vim config..."
-    local _vim_dotfiles=(".vim" ".vimrc" ".viminfo")
-    for file in "${_vim_dotfiles[@]}"; do
-        [ -e "${HOME}/${file}" ] && rm -rf "${HOME:?}/${file}" >/dev/null 2>&1
-    done
-
-    mkdir -p "${XDG_DATA_HOME}/vim" && touch "${XDG_DATA_HOME}/vim/viminfo"
-}
-
-setting_tmux() {
-    info "setting tmux config..."
-    [ -e "${HOME}/.tmux.conf" ] && rm -rf "${HOME:?}/.tmux.conf" >/dev/null 2>&1
-}
-
-setting_git() {
-    info "setting git config..."
-    [ -e "${HOME}/.gitconfig" ] && rm -rf "${HOME:?}/.gitconfig" >/dev/null 2>&1
-}
-
-brew_font() {
-    info "checking the font is installed or not..."
-
-    if brew list | grep -q font-hack-nerd-font; then
-        info "Nerd font is installed! skip the install..."
-    else
-        info "not found. so install the hack nerd font..."
-        brew tap homebrew/cask-fonts
-        brew install font-hack-nerd-font
-    fi
-}
-
-install_font() {
-    info "checking the font in installed or not..."
-
-    if fc-list | grep -q HackNerd; then
-        info "Nerd font is installed! skip the install..."
-    else
-        info "not found. so install the hack nerd font..."
-        if [ ! -d "${REPOS_DIR}" ]; then
-            mkdir -p "${REPOS_DIR}"
-        fi
-        git clone --depth 1 "https://github.com/ryanoasis/nerd-fonts.git" "${REPOS_DIR}/nerd_fonts"
-        "${REPOS_DIR}/nerd_fonts/install.sh" Hack --quiet
-    fi
-}
-
-# useful function
+# Print info message
 info() {
     printf '%s\n' "${bold}info:${no_format} $*"
 }
 
+# Print warning message
 warn() {
-    printf '%s\n' "${yellow}warning: $*${no_format}"
+    printf '%s\n' "${yellow}warning:${no_format} $*" >&2
 }
 
+# Print error message and exit
 err() {
-    printf '%s\n' "${red}error: $*${no_format}" >&2
+    printf '%s\n' "${red}error:${no_format} $*" >&2
     exit 1
 }
 
-blue_msg() {
-    printf '%s\n' "${blue}$*${no_format}"
-}
-
+# Check if command exists, else fail
 need_cmd() {
-    if ! check_cmd "$1"; then
+    if ! command -v "$1" >/dev/null 2>&1; then
         err "need '$1' (command not found)"
     fi
 }
 
-check_cmd() {
-    command -v "$1" >/dev/null 2>&1
+# Backup a file to a destination directory with "_old" suffix
+# Arguments:
+#   1: Source file path
+#   2: Destination directory path
+#   3: Destination base name (without dot)
+backup_file() {
+    local src_file="$1"
+    local dest_dir="$2"
+    local dest_base_name="$3"
+
+    mkdir -p "$dest_dir"
+    if [ -e "$src_file" ]; then
+        mv "$src_file" "${dest_dir}/${dest_base_name}_old"
+    fi
 }
 
-# execute part
+########################################
+# Setup Functions
+########################################
+
+# Move and backup Zsh dotfiles, remove leading dot and add "_old" suffix
+# Also create symlinks from zshrc -> .zshrc
+setup_zsh_config() {
+    info "Setting up Zsh configuration..."
+    local ZSH_DOTFILES=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc" ".zimrc")
+
+    mkdir -p "${ZDOTDIR}"
+
+    for file in "${ZSH_DOTFILES[@]}"; do
+        local base_name="${file#.}"  # ".zshrc" -> "zshrc"
+        backup_file "${HOME}/${file}" "${ZDOTDIR}" "${base_name}"
+        ln -sf "${ZDOTDIR}/${base_name}" "${ZDOTDIR}/${file}"
+    done
+}
+
+# Backup Vim configuration
+setup_vim_config() {
+    info "Setting up Vim configuration..."
+    mkdir -p "${XDG_CONFIG_HOME}/vim"
+    backup_file "${HOME}/.vimrc" "${XDG_CONFIG_HOME}/vim" "vimrc"
+
+    # Remove old Vim directories if they exist
+    [ -e "${HOME}/.vim" ] && rm -rf "${HOME}/.vim"
+    [ -e "${HOME}/.viminfo" ] && rm -f "${HOME}/.viminfo"
+
+    # Prepare viminfo in XDG directory
+    mkdir -p "${XDG_DATA_HOME}/vim"
+    touch "${XDG_DATA_HOME}/vim/viminfo"
+}
+
+# Backup Tmux configuration
+setup_tmux_config() {
+    info "Setting up Tmux configuration..."
+    mkdir -p "${XDG_CONFIG_HOME}/tmux"
+    backup_file "${HOME}/.tmux.conf" "${XDG_CONFIG_HOME}/tmux" "tmux.conf"
+}
+
+# Backup Git configuration
+setup_git_config() {
+    info "Setting up Git configuration..."
+    mkdir -p "${XDG_CONFIG_HOME}/git"
+    backup_file "${HOME}/.gitconfig" "${XDG_CONFIG_HOME}/git" "config"
+}
+
+########################################
+# Main Function
+########################################
+main() {
+    init_colors
+
+    # Check for necessary commands
+    need_cmd ln
+    need_cmd mkdir
+
+    printf "\n"
+    setup_zsh_config
+    setup_vim_config
+    setup_tmux_config
+    setup_git_config
+
+    printf "%b%bComplete the initial setting!%b\n" "${underline}" "${bold}" "${no_format}"
+    printf "Please relogin your shell to apply changes.\n\n"
+}
+
+########################################
+# Execute
+########################################
 main "$@" || exit 1

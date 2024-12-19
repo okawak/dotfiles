@@ -20,11 +20,11 @@ bindkey -e
 WORDCHARS=${WORDCHARS//[\/]/}
 
 # path to homebrew for macos
-case ${OSTYPE} in
-darwin*)
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    ;;
-esac
+if [[ "$OSTYPE" == darwin* ]]; then
+    if [[ -x "/opt/homebrew/bin/brew" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+fi
 
 # XDG bin path
 path=(
@@ -83,14 +83,6 @@ fi
 if command -v fzf >/dev/null 2>&1; then
     source <(fzf --zsh)
 fi
-
-
-# xdg-ninja script
-case ${OSTYPE} in
-linux*)
-    [ -f "${HOME}/repos/xdg-ninja/xdg-ninja.sh" ] && alias xdg-ninja="${HONE}"/repos/xdg-ninja/xdg-ninja.sh
-    ;;
-esac
 
 # starship setting
 if command -v starship >/dev/null 2>&1; then
