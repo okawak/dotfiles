@@ -57,8 +57,9 @@ root = ~/crib
 [ghq "https://www.cns.s.u-tokyo.ac.jp"]
 root = ~/crib
 
-[url "git@github.com:"]
-pushInsteadOf = https://github.com/
+[url "git@github.com:okawak/"]
+InsteadOf = https://github.com/okawak/
 
-[url "git@github.com:okawak"]
-insteadOf = https://github.com/okawak
+[url "git@github.com:CRIB-project/"]
+InsteadOf = https://github.com/CRIB-project/
+
