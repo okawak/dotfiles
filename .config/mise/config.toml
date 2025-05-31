@@ -12,6 +12,7 @@ neovim = "latest"
 fzf = "latest"
 delta = "latest"
 bottom = "latest"
+bun = "latest"
 
 [settings]
 # plugins can read the versions files used by other version managers (if enabled by the plugin)

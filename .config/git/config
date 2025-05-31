@@ -65,3 +65,5 @@ InsteadOf = https://github.com/okawak/
 [url "git@github.com:CRIB-project/"]
 InsteadOf = https://github.com/CRIB-project/
 
+[init]
+defaultBranch = main
