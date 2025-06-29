@@ -14,10 +14,9 @@ bottom = "latest"
 bun = "latest"
 
 [settings]
-# plugins can read the versions files used by other version managers (if enabled by the plugin)
+# tools can read the versions files used by other version managers
 # for example, .nvmrc in the case of node's nvm
-legacy_version_file = true                     # enabled by default (unlike asdf)
-legacy_version_file_disable_tools = ['python'] # disable for specific tools
+idiomatic_version_file_enable_tools = ["rust", "node"]
 
 # configure `mise install` to always keep the downloaded archive
 always_keep_download = false # deleted after install by default
@@ -29,10 +28,9 @@ always_keep_install = false  # deleted on failure by default
 plugin_autoupdate_last_check_duration = '1 week' # set to 0 to disable updates
 
 # config files with these prefixes will be trusted by default
-trusted_config_paths = ['~/work/my-trusted-projects']
+trusted_config_paths = ['~/work/*']
 
 verbose = false      # set to true to see full installation output, see `MISE_VERBOSE`
-asdf_compat = false  # set to true to ensure .tool-versions will be compatible with asdf, see `MISE_ASDF_COMPAT`
 http_timeout = "30s" # set the timeout for http requests as duration string, see `MISE_HTTP_TIMEOUT`
 jobs = 4             # number of plugins or runtimes to install in parallel. The default is `4`.
 raw = false          # set to true to directly pipe plugins to stdin/stdout/stderr
@@ -44,9 +42,7 @@ paranoid = false              # see MISE_PARANOID
 
 shorthands_file = '~/.config/mise/shorthands.toml' # path to the shorthands file, see `MISE_SHORTHANDS_FILE`
 disable_default_shorthands = false # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
-disable_tools = [
-  'node',
-] # disable specific tools, generally used to turn off core tools
+disable_tools = ['node'] # disable specific tools, generally used to turn off core tools
 
 env_file = '.env' # load env vars from a dotenv file, see `MISE_ENV_FILE`
 

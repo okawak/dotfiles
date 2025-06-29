@@ -1715,16 +1715,24 @@
     // LSP Specific settings.
     "lsp": {
         // Specify the LSP name as a key here.
-        // "rust-analyzer": {
-        //     // A special flag for rust-analyzer integration, to use server-provided tasks
-        //     enable_lsp_tasks": true,
-        //     // These initialization options are merged into Zed's defaults
-        //     "initialization_options": {
-        //         "check": {
-        //             "command": "clippy" // rust-analyzer.check.command (default: "check")
-        //         }
-        //     }
-        // }
+        "rust-analyzer": {
+            // A special flag for rust-analyzer integration, to use server-provided tasks
+            "enable_lsp_tasks": true,
+            // These initialization options are merged into Zed's defaults
+            "initialization_options": {
+                "check": {
+                    "command": "clippy" // rust-analyzer.check.command (default: "check")
+                }
+            },
+            // user setting: for leptos project
+            "procMacro": {
+                "ignored": [
+                    // optional:
+                    // "component",
+                    "server"
+                ]
+            }
+        }
     },
     // Jupyter settings
     "jupyter": {
