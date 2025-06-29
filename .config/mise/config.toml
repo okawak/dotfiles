@@ -4,7 +4,6 @@
 node = 'lts'
 java = 'latest'
 go = 'latest'
-python = "3.12"
 ghq = "latest"
 terraform = "latest"
 starship = "latest"
