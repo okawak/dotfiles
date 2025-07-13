@@ -1,0 +1,10 @@
+font-feature = -calt
+font-feature = -dlig
+font-size = 14
+cursor-opacity = 0.5
+cursor-style = block
+cursor-style-blink = false
+unfocused-split-opacity = 0.825
+window-inherit-working-directory = true
+resize-overlay = never
+
