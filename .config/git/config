@@ -17,6 +17,12 @@ quotepath = false
 # git hook
 hooksPath = .githooks
 
+[commit]
+gpgsign = true
+
+[gpg]
+program = gpg
+
 [interactive]
 diffFilter = delta --color-only
 
@@ -67,3 +73,7 @@ InsteadOf = https://github.com/CRIB-project/
 
 [init]
 defaultBranch = main
+
+[include]
+path = config.local
+

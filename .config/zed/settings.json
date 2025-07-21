@@ -28,7 +28,7 @@
     "edit_prediction_provider": "copilot"
   },
   // The name of a font to use for rendering text in the editor
-  "buffer_font_family": "UDEV Gothic 35NF",
+  "buffer_font_family": "Firge35Nerd Console",
   // Set the buffer text's font fallbacks, this will be merged with
   // the platform's default fallbacks.
   "buffer_font_fallbacks": null,
@@ -54,7 +54,7 @@
   "buffer_line_height": "comfortable",
   // The name of a font to use for rendering text in the UI
   // You can set this to ".SystemUIFont" to use the system font
-  "ui_font_family": "UDEV Gothic 35NF",
+  "ui_font_family": "Firge35Nerd Console",
   // Set the UI's font fallbacks, this will be merged with the platform's
   // default font fallbacks.
   "ui_font_fallbacks": null,
@@ -218,7 +218,9 @@
   // Whether to show code action button at start of buffer line.
   "inline_code_actions": true,
   // Whether to allow drag and drop text selection in buffer.
-  "drag_and_drop_selection": true,
+  "drag_and_drop_selection": {
+    "enabled": true
+  },
   // What to do when go to definition yields no results.
   //
   // 1. Do nothing: `none`
@@ -738,7 +740,6 @@
   },
   "agent": {
     // Version of this setting.
-    "version": "2",
     // Whether the agent is enabled.
     "enabled": true,
     /// What completion mode to start new threads in, if available. Can be 'normal' or 'burn'.
@@ -1668,7 +1669,6 @@
   // Different settings for specific language models.
   "language_models": {
     "anthropic": {
-      "version": "1",
       "api_url": "https://api.anthropic.com"
     },
     "google": {
@@ -1678,7 +1678,6 @@
       "api_url": "http://localhost:11434"
     },
     "openai": {
-      "version": "1",
       "api_url": "https://api.openai.com/v1"
     },
     "open_router": {

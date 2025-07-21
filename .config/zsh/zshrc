@@ -69,6 +69,9 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 
+# git setting
+export GPG_TTY=${TTY}
+
 # command aliases
 alias cp="cp -i"
 alias mv="mv -i"
