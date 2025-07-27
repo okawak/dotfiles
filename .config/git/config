@@ -18,10 +18,7 @@ quotepath = false
 hooksPath = .githooks
 
 [commit]
-gpgsign = true
-
-[gpg]
-program = gpg
+gpgsign = false
 
 [interactive]
 diffFilter = delta --color-only
