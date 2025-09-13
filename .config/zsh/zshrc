@@ -105,6 +105,12 @@ if command -v mise >/dev/null 2>&1; then
     )
 fi
 
+# bun tools installed globally
+path=(
+    ${HOME}/.cache/.bun/bin
+    $path
+)
+
 # Load Angular CLI autocompletion.
 if command -v ng >/dev/null 2>&1; then
     if ! command -v node >/dev/null 2>&1; then

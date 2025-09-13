@@ -37,7 +37,7 @@ if ($^O eq 'MSWin32') {
 # $pdf_mode = 3; $dvipdf を利用して .dvi ファイルから PDF を作成。
 # $pdf_mode = 4; $lualatex を利用して PDF を作成。
 # $pdf_mode = 5; $xelatex を利用して PDF を作成。
-$pdf_mode = 3;
+$pdf_mode = 4;
 
 # 一時ファイルの拡張子
 @generated_exts = qw(aux bbl blg idx ilg ind lof log lot out toc fls fdb_latexmk synctex.gz);
