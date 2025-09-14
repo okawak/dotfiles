@@ -80,10 +80,11 @@
     "inactive_opacity": 1.0
   },
   // Layout mode of the bottom dock. Defaults to "contained"
+  //   choices: contained, full, left_aligned, right_aligned
   "bottom_dock_layout": "contained",
   // The direction that you want to split panes horizontally. Defaults to "up"
   "pane_split_direction_horizontal": "up",
-  // The direction that you want to split panes horizontally. Defaults to "left"
+  // The direction that you want to split panes vertically. Defaults to "left"
   "pane_split_direction_vertical": "left",
   // Centered layout related settings.
   "centered_layout": {
@@ -1789,6 +1790,9 @@
       "enable_lsp_tasks": true,
       // These initialization options are merged into Zed's defaults
       "initialization_options": {
+        "cargo": {
+          "allFeatures": true // Enable all features
+        },
         "check": {
           "command": "clippy" // rust-analyzer.check.command (default: "check")
         }
