@@ -51,3 +51,6 @@ experimental = true # enable experimental features
 # configure messages displayed when entering directories with config files
 status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = false }
 
+[env]
+CLICOLOR_FORCE = "1"
+FORCE_COLOR = "1"
