@@ -8,10 +8,10 @@ ghq = "latest"
 terraform = "latest"
 starship = "latest"
 neovim = "latest"
-fzf = "latest"
 delta = "latest"
 bottom = "latest"
 bun = "latest"
+yarn = "latest"
 
 [settings]
 # tools can read the versions files used by other version managers

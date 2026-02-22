@@ -1,5 +1,4 @@
-require("options")
-require("keymaps")
-require("plugin_manager")
-require("lsp")
-
+--require("options")
+--require("keymaps")
+--require("plugin_manager")
+--require("lsp")

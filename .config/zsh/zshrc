@@ -83,8 +83,13 @@ if command -v nvim >/dev/null 2>&1; then
 fi
 
 # fzf setting
-if command -v fzf >/dev/null 2>&1; then
-    source <(fzf --zsh)
+#if command -v fzf >/dev/null 2>&1; then
+#    source <(fzf --zsh)
+#fi
+
+# skim setting
+if command -v sk >/dev/null 2>&1; then
+    source <(sk --shell zsh)
 fi
 
 # starship setting
@@ -145,17 +150,15 @@ if [ -d ${HOME}/art_analysis ]; then
 fi
 
 # ghq search and move to it
-ghq-fzf() {
-  local src=$(ghq list --full-path --exact | fzf --preview "ls -laTp {} | tail -n+4 | awk '{print \$9\"/\"\$6\"/\"\$7 \" \" \$10}'")
+ghq-sk() {
+  local src=$(ghq list --full-path --exact | sk --preview "ls -laTp {} | tail -n+4 | awk '{print \$9\"/\"\$6\"/\"\$7 \" \" \$10}'")
   if [ -n "$src" ]; then
     BUFFER="cd $src"
     zle accept-line
   fi
   zle -R -c
 }
-zle -N ghq-fzf
-bindkey '^]' ghq-fzf
-
+zle -N ghq-sk
+bindkey '^]' ghq-sk
 
 unset NO_COLOR
-
