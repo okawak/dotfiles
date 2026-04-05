@@ -100,7 +100,7 @@ backup_file() {
 # Also create symlinks from zshrc -> .zshrc
 setup_zsh_config() {
     info "Setting up Zsh configuration..."
-    local ZSH_DOTFILES=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc" ".zimrc")
+    local ZSH_DOTFILES=(".zlogin" ".zlogout" ".zprofile" ".zshenv" ".zshrc")
 
     mkdir -p "${ZDOTDIR}"
 
