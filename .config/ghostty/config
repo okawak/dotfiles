@@ -7,4 +7,5 @@ cursor-style-blink = false
 unfocused-split-opacity = 0.825
 window-inherit-working-directory = true
 resize-overlay = never
+shell-integration-features = ssh-terminfo,ssh-env,sudo
 
