@@ -356,24 +356,6 @@
       "variants": []
     },
     {
-      "path": "home/.github/Coding.md",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
-      "path": "home/.github/Linux.md",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
-      "path": "home/.github/MacOS.md",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
       "path": "home/.github/README.md",
       "autosave": true,
       "encrypt": false,
