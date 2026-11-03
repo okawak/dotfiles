@@ -362,12 +362,6 @@
       "variants": []
     },
     {
-      "path": "home/.github/README.md",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
       "path": "home/.local/state/less/.gitkeep",
       "autosave": true,
       "encrypt": false,
