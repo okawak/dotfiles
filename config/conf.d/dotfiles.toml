@@ -1,7 +1,6 @@
 [settings.write_targets]
 dotfiles = "~/.config/mise/conf.d/dotfiles.toml"
 
-# yadm の追跡ファイルと、この設定自身を個別に指定します。
 [dotfiles]
 "~/.config/ghostty/config" = { mode = "track" }
 "~/.config/git/config" = { mode = "track" }
