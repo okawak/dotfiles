@@ -1,0 +1,140 @@
+#
+#  ~/.zshrc
+#
+
+typeset -U PATH
+
+HISTFILE="$XDG_STATE_HOME"/zsh/history
+
+setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+
+# emacs key-bind
+bindkey -e
+
+WORDCHARS=${WORDCHARS//[\/]/}
+
+# path to homebrew for macos
+if [[ "$OSTYPE" == darwin* ]]; then
+    if [[ -x "/opt/homebrew/bin/brew" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+fi
+
+# XDG bin path
+path=(
+    ${XDG_BIN_HOME}
+    $path
+)
+
+# mise setting
+if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate zsh)"
+fi
+
+# sheldon setting
+if command -v sheldon >/dev/null 2>&1; then
+    eval "$(sheldon source)"
+fi
+
+if [[ -n "$XDG_CACHE_HOME" ]]; then
+    [[ -d "$XDG_CACHE_HOME/zsh" ]] || mkdir -p "$XDG_CACHE_HOME/zsh"
+    zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
+    autoload -U compinit
+    compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+else
+    autoload -U compinit
+    compinit
+fi
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# git setting
+export GPG_TTY="$(tty)"
+
+# command aliases
+alias cp="cp -i"
+alias mv="mv -i"
+
+# neovim setting
+if command -v nvim >/dev/null 2>&1; then
+    alias vi="nvim"
+    alias nim="nvim"
+fi
+
+# skim setting
+if command -v sk >/dev/null 2>&1; then
+    source <(sk --shell zsh)
+fi
+
+# starship setting
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init zsh)"
+fi
+
+# rust setting
+if [ -f "${XDG_DATA_HOME}"/cargo/env ]; then
+    source "${XDG_DATA_HOME}"/cargo/env
+fi
+
+# npm tools installed globally
+if command -v mise >/dev/null 2>&1; then
+    path=(
+        ${XDG_DATA_HOME}/npm/bin(N-/)
+        $path
+    )
+fi
+
+# bun tools installed globally
+path=(
+    ${HOME}/.cache/.bun/bin
+    $path
+)
+
+# Load Angular CLI autocompletion.
+if command -v ng >/dev/null 2>&1; then
+    if ! command -v node >/dev/null 2>&1; then
+        # need to specify the node path
+        path=(
+            ${XDG_DATA_HOME}/mise/installs/node/latest/bin(N-/)
+            $path
+        )
+    fi
+    source <(ng completion script)
+fi
+
+# eza setting
+if command -v eza >/dev/null 2>&1; then
+    export EZA_COLORS='da=1;34:gm=1;34:Su=1;34'
+
+    alias ls='eza --group-directories-first'
+    if eza --git /dev/null &>/dev/null; then
+      alias ll='ls -l --git -g -h'      # Long format, git status
+    else
+      alias ll='ls -l -g -h'            # Long format
+    fi
+    alias l='ll -a'               # Long format, all files
+    alias lr='ll -T'              # Long format, recursive as a tree
+    alias lx='ll -sextension'     # Long format, sort by extension
+    alias lk='ll -ssize'          # Long format, largest file size last
+    alias lt='ll -smodified'      # Long format, newest modification time last
+    alias lc='ll -schanged'       # Long format, newest status change (ctime) last
+fi
+
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# ghq search and move to it
+ghq-sk() {
+  local src=$(ghq list --full-path --exact | sk --preview "ls -laTp {} | tail -n+4 | awk '{print \$9\"/\"\$6\"/\"\$7 \" \" \$10}'")
+  if [ -n "$src" ]; then
+    BUFFER="cd $src"
+    zle accept-line
+  fi
+  zle -R -c
+}
+zle -N ghq-sk
+bindkey '^]' ghq-sk
+
+unset NO_COLOR

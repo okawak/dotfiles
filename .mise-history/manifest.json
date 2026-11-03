@@ -1,0 +1,412 @@
+{
+  "format": 1,
+  "enrollment": [
+    {
+      "path": "config/conf.d/dotfiles.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "config/config.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/ghostty/config",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/git/config",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/jj/config.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/latexmk/latexmkrc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/npm/npmrc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/init.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lazy-lock.json",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/config/lualine.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/config/toggleterm.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/keymaps.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/lsp.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/options.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugin_manager.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/git/diffview.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/git/gitsigns.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lazy.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/LuaSnip.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/cmp-buffer.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/cmp-nvim-lsp.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/cmp_luasnip.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/fidget.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/mason-lspconfig.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/mason-null-ls.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/mason.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/none-ls.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/nvim-cmp.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/lsp/nvim-lspconfig.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/nvim-tree.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/nvim-treesitter.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/ui/barbar.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/ui/color_scheme.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/ui/lualine.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/ui/nvim-colorizer.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/ui/toggleterm.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/lua/plugins/ui/vim-quickhl.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim/stylua.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/pg/.gitkeep",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/sheldon/plugins.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/starship.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/tmux/tmux.conf",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/vim/vimrc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/event.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/format.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/keybinds.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/mousebinds.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/status.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/stylua.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/wezterm/wezterm.lua",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/yadm/Brewfile",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/yadm/bootstrap",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/yadm/install_neovim.sh",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/zed/settings.json",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/zsh/zlogin",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/zsh/zlogout",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/zsh/zprofile",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/zsh/zshenv",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/zsh/zshrc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.github/Coding.md",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.github/Linux.md",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.github/MacOS.md",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.github/README.md",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.local/state/less/.gitkeep",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.local/state/python_history",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.local/state/zsh/.gitkeep",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/python/pythonrc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    }
+  ],
+  "exclude": [],
+  "recipients": [],
+  "permissions": {
+    "home/.config/zed/settings.json": 384
+  }
+}

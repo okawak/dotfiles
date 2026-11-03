@@ -1,0 +1,19 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "okawak"
+email = "kodak2022@outlook.jp"
+
+[signing]
+behavior = "own"
+backend = "gpg"
+
+[ui]
+pager = "delta"
+diff-formatter = ":git"
+
+[ui.graph]
+style = "ascii-large"
+
+[templates]
+log = "builtin_log_compact_full_description"

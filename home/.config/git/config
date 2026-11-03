@@ -1,0 +1,76 @@
+#
+#  ~/.gitconfig
+# This is Git's per-user configuration file.
+#
+
+[user]
+name = okawak
+email = kodak2022@outlook.jp
+
+[core]
+editor = vim
+pager = delta
+autocrlf = input
+safecrlf = true
+# prevent garbled text (mainly for Japanese)
+quotepath = false
+# git hook
+hooksPath = .githooks
+
+[commit]
+gpgsign = false
+
+[interactive]
+diffFilter = delta --color-only
+
+[delta]
+navigate = true    # use n and N to move between diff sections
+side-by-side = true
+
+# delta detects terminal colors automatically; set one of these to disable auto-detection
+dark = true
+# light = true
+
+[diff]
+colorMoved = default
+
+# git fetch --prune, delete the branch that deleted in remote
+[fetch]
+prune = true
+
+# git pull --ff-only, not to make merge commit
+[pull]
+ff = only
+
+# git merge --no-ff, make merge commit
+[merge]
+ff = false
+conflictstyle = diff3
+
+[push]
+default = simple
+
+[ghq]
+root = ~/repos
+
+[ghq "https://github.com/okawak"]
+root = ~/hobby
+
+[ghq "https://github.com/CRIB-project"]
+root = ~/crib
+
+[ghq "https://www.cns.s.u-tokyo.ac.jp"]
+root = ~/crib
+
+[url "git@github.com:okawak/"]
+InsteadOf = https://github.com/okawak/
+
+[url "git@github.com:CRIB-project/"]
+InsteadOf = https://github.com/CRIB-project/
+
+[init]
+defaultBranch = main
+
+[include]
+path = config.local
+
