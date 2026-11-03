@@ -1,11 +1,71 @@
 #!/usr/bin/env bash
-#MISE description="端末の初期設定（ひな形）"
+#MISE description="Homebrew パッケージとシェル・Vim・tmux・Gitの初期設定"
 
 set -euo pipefail
 
-# mise bootstrap のたびに実行されるため、繰り返し実行できる処理を追加します。
-# TODO: Zsh の設定ファイルへのリンクを整備する。
-# TODO: Vim のデータディレクトリを整備する。
-# TODO: Homebrew パッケージのセットアップ方法を決める。
+# 競合する既存ファイルは、実行ごとに一意のディレクトリへ退避します。
+link_config() {
+    local source_file="$1"
+    local target_file="$2"
+    local backup_dir
 
-printf '%s\n' 'bootstrap はひな形です。初期設定処理を追加してください。'
+    if [[ -e "$target_file" && "$source_file" -ef "$target_file" ]]; then
+        return
+    fi
+
+    mkdir -p "$(dirname "$target_file")"
+    if [[ -e "$target_file" || -L "$target_file" ]]; then
+        mkdir -p "$bootstrap_backup_root"
+        backup_dir="$(mktemp -d "$bootstrap_backup_root/XXXXXXXX")"
+        mv "$target_file" "$backup_dir/"
+        printf '退避しました %s -> %s/\n' "$target_file" "$backup_dir"
+    fi
+    ln -s "$source_file" "$target_file"
+}
+
+main() {
+    local mise_config_dir
+    mise_config_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+    local data_dir="${XDG_DATA_HOME:-$HOME/.local/share}"
+    local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
+    local state_dir="${XDG_STATE_HOME:-$HOME/.local/state}"
+    local zsh_dir="${ZDOTDIR:-$config_dir/zsh}"
+    local bootstrap_backup_root="$state_dir/mise/bootstrap-backups"
+    local config_name source_file
+
+    # ファイル不足は、リンクの変更やパッケージ導入に入る前に検出します。
+    for source_file in "$mise_config_dir/Brewfile" \
+        "$zsh_dir"/{zlogin,zlogout,zprofile,zshenv,zshrc} \
+        "$config_dir/vim/vimrc" "$config_dir/tmux/tmux.conf" "$config_dir/git/config"; do
+        if [[ ! -f "$source_file" ]]; then
+            printf '必要なファイルがありません %s\n' "$source_file" >&2
+            return 1
+        fi
+    done
+
+    local brew_command
+    brew_command="$(command -v brew || true)"
+    if [[ -z "$brew_command" ]]; then
+        printf '%s\n' 'Homebrew をインストールしてから再実行してください。' >&2
+        return 1
+    fi
+    "$brew_command" bundle --file="$mise_config_dir/Brewfile" --no-upgrade
+
+    for config_name in zlogin zlogout zprofile zshenv zshrc; do
+        link_config "$zsh_dir/$config_name" "$zsh_dir/.$config_name"
+    done
+    link_config "$zsh_dir/zshenv" "$HOME/.zshenv"
+    link_config "$config_dir/vim/vimrc" "$HOME/.vimrc"
+    link_config "$config_dir/tmux/tmux.conf" "$HOME/.tmux.conf"
+    link_config "$config_dir/git/config" "$HOME/.gitconfig"
+
+    mkdir -p "$data_dir/vim" "$cache_dir/vim" "$state_dir/zsh"
+    touch "$cache_dir/vim/viminfo"
+    printf '%s\n' '初期設定が完了しました。新しいシェルを開いて設定を読み込んでください。'
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

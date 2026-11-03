@@ -2,6 +2,12 @@
   "format": 1,
   "enrollment": [
     {
+      "path": "config/Brewfile",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
       "path": "config/conf.d/dotfiles.toml",
       "autosave": true,
       "encrypt": false,
@@ -309,24 +315,6 @@
     },
     {
       "path": "home/.config/wezterm/wezterm.lua",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
-      "path": "home/.config/yadm/Brewfile",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
-      "path": "home/.config/yadm/bootstrap",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
-      "path": "home/.config/yadm/install_neovim.sh",
       "autosave": true,
       "encrypt": false,
       "variants": []
