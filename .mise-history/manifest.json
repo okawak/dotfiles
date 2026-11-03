@@ -8,6 +8,12 @@
       "variants": []
     },
     {
+      "path": "config/conf.d/tools.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
       "path": "config/config.toml",
       "autosave": true,
       "encrypt": false,

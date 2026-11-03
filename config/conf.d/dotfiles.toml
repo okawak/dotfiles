@@ -8,6 +8,7 @@ dotfiles = "~/.config/mise/conf.d/dotfiles.toml"
 "~/.config/jj/config.toml" = { mode = "track" }
 "~/.config/latexmk/latexmkrc" = { mode = "track" }
 "~/.config/mise/conf.d/dotfiles.toml" = { mode = "track" }
+"~/.config/mise/conf.d/tools.toml" = { mode = "track" }
 "~/.config/mise/config.toml" = { mode = "track" }
 "~/.config/npm/npmrc" = { mode = "track" }
 "~/.config/nvim/init.lua" = { mode = "track" }

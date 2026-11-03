@@ -1,0 +1,15 @@
+[settings.write_targets]
+tools = "~/.config/mise/conf.d/tools.toml"
+
+[tools]
+node = "lts"
+java = "latest"
+go = "latest"
+ghq = "latest"
+terraform = "latest"
+starship = "latest"
+neovim = "latest"
+delta = "latest"
+bottom = "latest"
+bun = "latest"
+yarn = "latest"
