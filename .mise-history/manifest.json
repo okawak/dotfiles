@@ -20,6 +20,12 @@
       "variants": []
     },
     {
+      "path": "config/tasks/bootstrap",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
       "path": "home/.config/ghostty/config",
       "autosave": true,
       "encrypt": false,

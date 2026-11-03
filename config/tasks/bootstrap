@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="端末の初期設定（ひな形）"
+
+set -euo pipefail
+
+# mise bootstrap のたびに実行されるため、繰り返し実行できる処理を追加します。
+# TODO: Zsh の設定ファイルへのリンクを整備する。
+# TODO: Vim のデータディレクトリを整備する。
+# TODO: Homebrew パッケージのセットアップ方法を決める。
+
+printf '%s\n' 'bootstrap はひな形です。初期設定処理を追加してください。'
