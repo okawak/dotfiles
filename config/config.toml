@@ -10,6 +10,11 @@ status.show_tools = true
 status.show_env = true
 tool_update.global_auto = true
 task.output = "keep-order"
+history.sync = "manual"
+
+[history.origin]
+url = "git@github.com:okawak/dotfiles.git"
+branch = "main"
 
 [bootstrap.services.mise-history]
 builtin = "history-watch"
