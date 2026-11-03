@@ -64,6 +64,6 @@ dotfiles = "~/.config/mise/conf.d/dotfiles.toml"
 "~/.config/zsh/zshrc" = { mode = "track" }
 "~/.github/README.md" = { mode = "track" }
 "~/.local/state/less/.gitkeep" = { mode = "track" }
-"~/.local/state/python_history" = { mode = "track" }
+"~/.local/state/python_history" = { mode = "track-local" }
 "~/.local/state/zsh/.gitkeep" = { mode = "track" }
 "~/python/pythonrc" = { mode = "track" }
